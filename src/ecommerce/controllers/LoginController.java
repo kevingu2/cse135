@@ -9,9 +9,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import ecommerce.model.User;
+import ecommerce.util.JDBCManager;
 
 public class LoginController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private JDBCManager jdbcManager=null;
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -25,5 +27,6 @@ public class LoginController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, 
 		      HttpServletResponse response) throws ServletException, IOException{
 		System.out.println("Get Request");
+		jdbcManager=JDBCManager.getInstance();
 	}
 }

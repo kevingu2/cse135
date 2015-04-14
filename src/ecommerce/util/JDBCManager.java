@@ -7,8 +7,8 @@ import java.util.Properties;
 
 public class JDBCManager {
 	private static JDBCManager jdbcManager = null;
-	private static String m_username="kevingu";
-	private static String m_password="";
+	private static String m_username="postgres";
+	private static String m_password="Okgo1199";
 	private static String m_dbms="postgresql";
 	private static String m_serverName="localhost";
 	private static String m_portNumber="5432";

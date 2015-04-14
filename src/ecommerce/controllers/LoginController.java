@@ -19,6 +19,7 @@ public class LoginController extends HttpServlet {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Post Request");
+		jdbcManager = JDBCManager.getInstance();
 		RequestDispatcher rd = request.getRequestDispatcher("/home.jsp");
 		String username = request.getParameter("username");
 		User user = new User(username);
@@ -29,7 +30,6 @@ public class LoginController extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Get Request");
-		jdbcManager = JDBCManager.getInstance();
 		/*try {
 			//jdbcManager
 					.query("Insert into UserX(name, role, age, state) Values(test, test, 10, CA");

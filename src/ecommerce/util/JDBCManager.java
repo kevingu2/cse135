@@ -2,14 +2,16 @@ package ecommerce.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 public class JDBCManager {
 	private static JDBCManager jdbcManager = null;
 	private static String m_username="kevingu";
 	private static String m_password="";
-	private static String m_dbms="postgresql";
+	private static String m_dbms="test";
 	private static String m_serverName="localhost";
 	private static String m_portNumber="5432";
 	private static Connection conn=null;
@@ -53,6 +55,17 @@ public class JDBCManager {
 	    } 
 	    System.out.println("Connected to database");
 	    return conn;
+	}
+	public void query(String query) throws SQLException{
+		 Statement stmt = null;
+		    try {
+		        stmt = conn.createStatement();
+		        ResultSet rs = stmt.executeQuery(query);
+		    } catch (SQLException e ) {
+		    	e.printStackTrace();
+		    } finally {
+		        if (stmt != null) { stmt.close(); }
+		    }
 	}
 	private static void closeConnection(){
 		try {

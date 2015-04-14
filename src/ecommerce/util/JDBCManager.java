@@ -6,14 +6,10 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+import ecommerce.util.Constants;
 
 public class JDBCManager {
 	private static JDBCManager jdbcManager = null;
-	private static String m_username="kevingu";
-	private static String m_password="";
-	private static String m_dbms="test";
-	private static String m_serverName="localhost";
-	private static String m_portNumber="5432";
 	private static Connection conn=null;
 	
 	public static JDBCManager getInstance() {
@@ -28,7 +24,8 @@ public class JDBCManager {
 	    		} catch (ClassNotFoundException e) {
 	    		    throw new RuntimeException("Cannot find the driver in the classpath!", e);
 	    		}
-				getConnection(m_username, m_password, m_dbms,m_serverName,m_portNumber);
+				getConnection(Constants.m_username, Constants.m_password, Constants.m_dbms, 
+						Constants.m_serverName,Constants.m_portNumber);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
 				System.out.println(e);

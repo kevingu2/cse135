@@ -30,12 +30,6 @@ public class LoginController extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Get Request");
-		/*try {
-			//jdbcManager
-					.query("Insert into UserX(name, role, age, state) Values(test, test, 10, CA");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
+
 	}
 }

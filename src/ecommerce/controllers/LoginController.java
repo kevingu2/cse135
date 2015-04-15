@@ -47,10 +47,8 @@ public class LoginController extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Get Request");
-<<<<<<< HEAD
 		//jdbcManager = JDBCManager.getInstance();
-=======
->>>>>>> 7813baa4de8a5964125aaa76b80a3e96986080a8
+
 		/*try {
 			//jdbcManager
 					.query("Insert into UserX(name, role, age, state) Values(test, test, 10, CA");

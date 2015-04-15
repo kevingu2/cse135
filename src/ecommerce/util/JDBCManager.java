@@ -2,10 +2,12 @@ package ecommerce.util;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
+
 import ecommerce.util.Constants;
 
 public class JDBCManager {
@@ -25,7 +27,7 @@ public class JDBCManager {
 	    		} catch (ClassNotFoundException e) {
 	    		    throw new RuntimeException("Cannot find the driver in the classpath!", e);
 	    		}
-				JDBCManager.conn = getConnection(Constants.m_username, Constants.m_password, Constants.m_dbms, 
+				JDBCManager.getConnection(Constants.m_username, Constants.m_password, Constants.m_dbms, 
 						Constants.m_serverName,Constants.m_portNumber);
 			} catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -56,34 +58,66 @@ public class JDBCManager {
 	    System.out.println("Connected to database");
 	    return conn;
 	}
-	public void query(String query) throws SQLException{
-		 Statement stmt = null;
+	public ResultSet query(String preparedString, Object[] params) throws SQLException{
+		ResultSet rs = null;
 		 if(JDBCManager.conn == null)
 		 {
 			 System.out.println("Can't establish Connection");
-			 return;
 		 }
+
+	    	PreparedStatement st = conn.prepareStatement(preparedString);
 		    try {
-		        stmt = conn.createStatement();
-		        ResultSet rs = stmt.executeQuery(query);
+		    	for(int i = 0; i < params.length; i++)
+		    	{
+		    		if(params[i] instanceof String)
+		    		{
+		    			st.setString(i+1, (String) params[i]);
+		    		}
+		    		else if(params[i] instanceof Integer)
+		    		{
+		    			st.setInt(i+1,(int) params[i]);
+		    		}
+		    		else
+		    		{
+		    			st.setDouble(i+1,(double) params[i]);
+		    		}
+		    	}
+		        rs = st.executeQuery();
 		    } catch (SQLException e ) {
 		    	e.printStackTrace();
 		    } finally {
-		        if (stmt != null) { stmt.close(); }
+		        if (st != null) { st.close(); }
+		        return rs;
 		    }
 	}
-	public void update(String update) throws SQLException
+	
+	public void update(String preparedString, Object[] params) throws SQLException
 	{
+    	
 		if(JDBCManager.conn == null)
 		 {
 			 System.out.println("Can't establish Connection");
 			 return;
 		 }
-		Statement stmt = null;
+		PreparedStatement st = conn.prepareStatement(preparedString);
 		try
 		{
-			stmt = JDBCManager.conn.createStatement();
-			stmt.executeUpdate(update);
+			for(int i = 0; i < params.length; i++)
+	    	{
+	    		if(params[i] instanceof String)
+	    		{
+	    			st.setString(i+1, (String) params[i]);
+	    		}
+	    		else if(params[i] instanceof Integer)
+	    		{
+	    			st.setInt(i+1,(int) params[i]);
+	    		}
+	    		else
+	    		{
+	    			st.setDouble(i+1,(double) params[i]);
+	    		}
+	    	}
+	        st.executeQuery();
 		}
 		catch (SQLException e)
 		{
@@ -91,12 +125,13 @@ public class JDBCManager {
 		}
 		finally
 		{
-			if (stmt != null)
+			if (st != null)
 			{
-				stmt.close();
+				st.close();
 			}
 		}
 	}
+	
 	private static void closeConnection(){
 		try {
 			conn.close();
@@ -105,4 +140,5 @@ public class JDBCManager {
 			e.printStackTrace();
 		}
 	}
+
 }

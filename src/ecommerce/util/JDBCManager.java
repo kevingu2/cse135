@@ -58,15 +58,17 @@ public class JDBCManager {
 	    System.out.println("Connected to database");
 	    return conn;
 	}
-	public ResultSet query(String preparedString, Object[] params) throws SQLException{
+	public ResultSet query(String preparedString, Object[] params)
+	{
 		ResultSet rs = null;
 		 if(JDBCManager.conn == null)
 		 {
 			 System.out.println("Can't establish Connection");
 		 }
 
-	    	PreparedStatement st = conn.prepareStatement(preparedString);
+	    	PreparedStatement st = null; 
 		    try {
+		    	st = conn.prepareStatement(preparedString);
 		    	for(int i = 0; i < params.length; i++)
 		    	{
 		    		if(params[i] instanceof String)
@@ -86,12 +88,17 @@ public class JDBCManager {
 		    } catch (SQLException e ) {
 		    	e.printStackTrace();
 		    } finally {
-		        if (st != null) { st.close(); }
+		        if (st != null) { try {
+					st.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} }
 		        return rs;
 		    }
 	}
 	
-	public void update(String preparedString, Object[] params) throws SQLException
+	public void update(String preparedString, Object[] params)
 	{
     	
 		if(JDBCManager.conn == null)
@@ -99,9 +106,10 @@ public class JDBCManager {
 			 System.out.println("Can't establish Connection");
 			 return;
 		 }
-		PreparedStatement st = conn.prepareStatement(preparedString);
+		PreparedStatement st = null;
 		try
 		{
+		st = conn.prepareStatement(preparedString);
 			for(int i = 0; i < params.length; i++)
 	    	{
 	    		if(params[i] instanceof String)
@@ -127,7 +135,12 @@ public class JDBCManager {
 		{
 			if (st != null)
 			{
-				st.close();
+				try {
+					st.close();
+				} catch (SQLException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 		}
 	}

@@ -13,9 +13,10 @@ public class JDBCManager {
 	private static Connection conn=null;
 	
 	public static JDBCManager getInstance() {
-	      if(jdbcManager == null) {
-	    	  jdbcManager = new JDBCManager();
+	      if(jdbcManager != null) {
+	    	  return jdbcManager;
 	      }
+	      jdbcManager=new JDBCManager();
 	      try {
 	    	  try {
 	    		    System.out.println("Loading driver...");
@@ -37,8 +38,6 @@ public class JDBCManager {
 	
 	private static Connection getConnection(String username, String password, String dbms,
 			String serverName, String portNumber) throws SQLException {
-
-	    Connection conn = null;
 	    Properties connectionProps = new Properties();
 	    connectionProps.put("user", username);
 	    connectionProps.put("password", password);

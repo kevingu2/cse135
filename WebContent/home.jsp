@@ -12,6 +12,7 @@
 <form action="login.jsp">
 	<button type="submit" type="button">Sign Out</button>
 </form>
+
 </html>
 
 <!-- This is from Kevin Gu -->

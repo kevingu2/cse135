@@ -11,6 +11,9 @@
 		<input type="submit" />
 	</form>
 </body>
+<form action=HomeController method="GET">
+	<button type="submit" type="button">Test Query</button>
+</form>
 </head>
 <body>
 

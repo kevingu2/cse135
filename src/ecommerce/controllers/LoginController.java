@@ -14,7 +14,7 @@ import ecommerce.util.JDBCManager;
 
 public class LoginController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private JDBCManager jdbcManager = null;
+	private JDBCManager jdbcManager = JDBCManager.getInstance();
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -24,12 +24,29 @@ public class LoginController extends HttpServlet {
 		User user = new User(username);
 		request.setAttribute("user", user);
 		rd.forward(request, response);
+		
+		String update = "INSERT INTO UserX(name, role, age, state) VALUES(" + "'" + username + "'" + ", 'Customer', 21, 'CA');";
+		if(jdbcManager != null)
+		{
+			try
+			{
+				jdbcManager.update(update);
+			}
+			catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		else
+		{
+			System.out.println("JDBC hasn't been loaded yet.");
+		}
 	}
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Get Request");
-		jdbcManager = JDBCManager.getInstance();
+		//jdbcManager = JDBCManager.getInstance();
 		/*try {
 			//jdbcManager
 					.query("Insert into UserX(name, role, age, state) Values(test, test, 10, CA");

@@ -47,7 +47,6 @@ public class LoginController extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Get Request");
-<<<<<<< HEAD
 		//jdbcManager = JDBCManager.getInstance();
 
 		/*try {
@@ -57,8 +56,5 @@ public class LoginController extends HttpServlet {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
-=======
-
->>>>>>> 6be48b5af052af7256780a5af85bca854adb0334
 	}
 }

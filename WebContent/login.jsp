@@ -6,14 +6,14 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <body>
-	<form action="LoginController" method="post">
-		Enter username : <input type="text" name="username"> <BR>
+	<form action="LoginController" method="get">
+		Enter name : <input type="text" name="name"> <BR>
 		<input type="submit" />
 	</form>
 </body>
-<form action=HomeController method="GET">
-	<button type="submit" type="button">Test Query</button>
-</form>
+	<form action="signup.jsp">
+		<button type="submit" type="button">Sign Up</button>
+	</form>
 </head>
 <body>
 

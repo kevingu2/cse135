@@ -20,15 +20,25 @@ public class HomeController extends HttpServlet {
 		      HttpServletResponse response) throws ServletException, IOException{
 		System.out.println("Get Request");
 		jdbcManager = JDBCManager.getInstance();
-		try {
-			jdbcManager
-					.query("Insert into UserX(name, role, age, state) Values(test, test, 10, CA)");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		Object param[]={"testname","testrole",32,"CA" };
+		/*String insert = "INSERT INTO UserX(name, role, age, state) Values(?, ?, ?,?)";
+		if(jdbcManager != null)
+		{
+			try
+			{
+				jdbcManager.query(insert, param);
+			}
+			catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		else
+		{
+			System.out.println("JDBC hasn't been loaded yet.");
 		}
 		RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
-		rd.forward(request, response);
+		rd.forward(request, response);*/
 	}
 	
 }

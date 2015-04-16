@@ -1,6 +1,7 @@
 package ecommerce.controllers;
 
 import java.io.IOException;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import javax.servlet.RequestDispatcher;
@@ -20,18 +21,38 @@ public class LoginController extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Post Request");
 		jdbcManager = JDBCManager.getInstance();
+		String name = request.getParameter("name");
+		String role = request.getParameter("role");
+		int age = Integer.parseInt(request.getParameter("age"));
+		String state = request.getParameter("state");
+		Object param[]={name, role, age, state};
+		String insert = "INSERT INTO UserX(name, role, age, state) Values(?, ?, ?,?)";
+
+		jdbcManager.update(insert, param);
+
+	}
+
+	protected void doGet(HttpServletRequest request,
+			HttpServletResponse response) throws ServletException, IOException {
+		jdbcManager = JDBCManager.getInstance();
 		RequestDispatcher rd = request.getRequestDispatcher("/home.jsp");
-		String username = request.getParameter("username");
-		User user = new User(username);
-		request.setAttribute("user", user);
-		rd.forward(request, response);
-		
-		String update = "INSERT INTO UserX(name, role, age, state) VALUES(" + "'" + username + "'" + ", 'Customer', 21, 'CA');";
+		String name = request.getParameter("name");
+		Object param[]={name};
+		String query = "select * from userx where name=?";
 		if(jdbcManager != null)
 		{
 			try
 			{
-				jdbcManager.update(update);
+				ResultSet result=jdbcManager.query(query, param);
+				if(result.next()){
+					User user=new User(result.getInt("id"), result.getString("name"),
+							result.getString("role"), result.getInt("age"),
+							result.getString("state"));
+					request.setAttribute("user", user);
+					jdbcManager.closeStatement();
+					result.close();
+					rd.forward(request, response);
+				}
 			}
 			catch (SQLException e)
 			{
@@ -42,19 +63,6 @@ public class LoginController extends HttpServlet {
 		{
 			System.out.println("JDBC hasn't been loaded yet.");
 		}
-	}
 
-	protected void doGet(HttpServletRequest request,
-			HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("Get Request");
-		//jdbcManager = JDBCManager.getInstance();
-
-		/*try {
-			//jdbcManager
-					.query("Insert into UserX(name, role, age, state) Values(test, test, 10, CA");
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
 	}
 }

@@ -23,5 +23,7 @@
 	<br>
 	<button type="submit" type="button">Submit</button>
 	</form>
+	<form action="login.jsp">
+		<button type="submit" type="button">Cancel</button></form>
 </body>
 </html>

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,7 +15,11 @@ import ecommerce.model.Product;
 import ecommerce.model.User;
 import ecommerce.util.JDBCManager;
 
-public class ProductController {
+public class ProductController extends HttpServlet {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JDBCManager jdbcManager = null;
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
@@ -36,9 +41,9 @@ public class ProductController {
 				Object[] arr = {name, cat, price, sku};
 				jdbcManager.update(s, arr);
 
-				arr = null;
+				Object[] arr1 = new Object[0];
 				String s1 = "SELECT * FROM Product";
-				ResultSet rs = jdbcManager.query(s1, arr);
+				ResultSet rs = jdbcManager.query(s1, arr1);
 				ArrayList<Product> list = new ArrayList<Product>();
 				while(rs.next())
 				{
@@ -67,9 +72,9 @@ public class ProductController {
 				Object[] arr = {sku};
 				jdbcManager.update(s, arr);
 
-				arr = null;
+				Object[] arr1 = new Object[0];
 				String s1 = "SELECT * FROM Product";
-				ResultSet rs = jdbcManager.query(s1, arr);
+				ResultSet rs = jdbcManager.query(s1, arr1);
 				ArrayList<Product> list = new ArrayList<Product>();
 				while(rs.next())
 				{
@@ -101,9 +106,9 @@ public class ProductController {
 				Object[] arr = {name, sku, cat, price};
 				jdbcManager.update(s, arr);
 
-				arr = null;
+				Object[] arr1 = new Object[0];
 				String s1 = "SELECT * FROM Product";
-				ResultSet rs = jdbcManager.query(s, arr);
+				ResultSet rs = jdbcManager.query(s1, arr1);
 				ArrayList<Product> list = new ArrayList<Product>();
 				while(rs.next())
 				{
@@ -127,12 +132,9 @@ public class ProductController {
 		}
 		else if (action != null && action.equals("select"))
 		{
-			User user = new User(Integer.parseInt(request.getParameter("ID")), request.getParameter("Name"),
-					request.getParameter("Role"), Integer.parseInt(request.getParameter("Age")), request.getParameter("State"));
-			request.setAttribute("user", user);
 			try
 			{
-				Object[] arr = null;
+				Object[] arr = new Object[0];
 				String s = "SELECT * FROM Product";
 				ResultSet rs = jdbcManager.query(s, arr);
 				ArrayList<Product> list = new ArrayList<Product>();
@@ -160,5 +162,6 @@ public class ProductController {
 			RequestDispatcher rd = request.getRequestDispatcher("/home.jsp");
 			rd.forward(request, response);
 		}
+		jdbcManager.closeStatement();
 	}
 }

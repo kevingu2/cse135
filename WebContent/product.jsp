@@ -11,8 +11,8 @@
 <title>Products Page</title>
 </head>
 
-<% User user = (User) request.getAttribute("user");
-if(user.getRole().equals(Constants.OWNER))
+<% 
+if(session.getAttribute("role").equals(Constants.OWNER))
 {
 %>
 <body>Products Page
@@ -24,9 +24,9 @@ if(user.getRole().equals(Constants.OWNER))
 	
 		<form action="CategoryController" method="get">
 	<input type="hidden" value="select" name="action">
-	<button type="submit" type="button">Products Page</button></form>
+	<button type="submit" type="button">Categories Page</button></form>
 	
-	<form action="LoginController.jsp">
+	<form action="LoginController">
 	<input type="hidden" value="signout" name="action">
 	<button type="submit" type="button">Sign Out</button></form>
 
@@ -53,6 +53,7 @@ if(user.getRole().equals(Constants.OWNER))
 	<table border="1">
 		<tr>
 			<th>SKU</th>
+			<th>Name</th>
 			<th>Category</th>
 			<th>Price</th>
 		</tr>
@@ -102,6 +103,16 @@ if(user.getRole().equals(Constants.OWNER))
 else
 {
 	%>
+	<body>
+		<form action="ProductController" method="get">
+	<input type="hidden" value="home" name="action">
+	<button type="submit" type="button">Home</button></form>
+	
+	<form action="LoginController">
+	<input type="hidden" value="signout" name="action">
+	<button type="submit" type="button">Sign Out</button></form>
+	</body>
+	
 	this page is available to owners
 	<%
 }%>

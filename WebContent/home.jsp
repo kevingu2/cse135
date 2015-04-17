@@ -15,15 +15,17 @@
 	<button type="submit" type="button">Sign Out</button>
 </form>
 
-<form action="HomeController" method="Get">
-	<button type="submit" type="button">Categories</button>
-</form>
-
 <%if(session.getAttribute("role").equals(Constants.OWNER)){%>
-		<form action="HomeController" method="Post">
-		<button type="submit" type="button">Products</button>
+		<form action="CategoryController" method="get">
+			<button type="submit" type="button">Categories</button>
+			<input type="hidden" name="action" value="select">
 		</form>
-	<%}%>
+
+		<form action="ProductController" method="get">
+		<button type="submit" type="button">Products</button>
+		<input type="hidden" name="action" value="select">
+		</form>
+<%}%>
 
 </html>
 

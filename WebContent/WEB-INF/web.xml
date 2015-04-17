@@ -13,6 +13,18 @@
     <servlet-name>HomeController</servlet-name>
     <servlet-class>ecommerce.controllers.HomeController</servlet-class>
   </servlet>
+  <servlet>
+    <description></description>
+    <display-name>CategoryController</display-name>
+    <servlet-name>CategoryController</servlet-name>
+    <servlet-class>ecommerce.controllers.CategoryController</servlet-class>
+  </servlet>
+  <servlet>
+    <description></description>
+    <display-name>ProductController</display-name>
+    <servlet-name>ProductController</servlet-name>
+    <servlet-class>ecommerce.controllers.ProductController</servlet-class>
+  </servlet>
   <servlet-mapping>
     <servlet-name>LoginController</servlet-name>
     <url-pattern>/LoginController</url-pattern>
@@ -20,6 +32,14 @@
   <servlet-mapping>
     <servlet-name>HomeController</servlet-name>
     <url-pattern>/HomeController</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>CategoryController</servlet-name>
+    <url-pattern>/CategoryController</url-pattern>
+  </servlet-mapping>
+    <servlet-mapping>
+    <servlet-name>ProductController</servlet-name>
+    <url-pattern>/ProductController</url-pattern>
   </servlet-mapping>
   <resource-ref>
     <description>Connection Pool</description>

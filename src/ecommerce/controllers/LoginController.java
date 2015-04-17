@@ -51,7 +51,7 @@ public class LoginController extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		jdbcManager = JDBCManager.getInstance();
-		if(request.getParameter("action")==null&&request.getParameter("action").equals("signout")){
+		if(request.getParameter("action")==null||request.getParameter("action").equals("signout")){
 			request.getSession().setAttribute("id", null);
 			request.getSession().setAttribute("name", null);
 			request.getSession().setAttribute("age", null);
@@ -59,36 +59,38 @@ public class LoginController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
 			rd.forward(request, response);
 		}
-		String name = request.getParameter("name");
-		Object param[]={name};
-		String query = "select * from userx where name=?";
-			try
-			{
-				
-				ResultSet result=jdbcManager.query(query, param);
-				if(result!=null && result.next()){
-					request.getSession().setAttribute("id", result.getInt("id"));
-					request.getSession().setAttribute("name", result.getString("name"));
-					request.getSession().setAttribute("role", result.getInt("age"));
-					request.getSession().setAttribute("state", result.getString("state"));
-					RequestDispatcher rd = request.getRequestDispatcher("/home.jsp");
-					rd.forward(request, response);
+		else{
+			String name = request.getParameter("name");
+			Object param[]={name};
+			String query = "select * from userx where name=?";
+				try
+				{
+					
+					ResultSet result=jdbcManager.query(query, param);
+					if(result!=null && result.next()){
+						request.getSession().setAttribute("id", result.getInt("id"));
+						request.getSession().setAttribute("name", result.getString("name"));
+						request.getSession().setAttribute("role", result.getString("role"));
+						request.getSession().setAttribute("age", result.getInt("age"));
+						request.getSession().setAttribute("state", result.getString("state"));
+						RequestDispatcher rd = request.getRequestDispatcher("/home.jsp");
+						rd.forward(request, response);
+					}
+					else{
+						System.out.println("User not signed up ");
+						RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
+						rd.forward(request, response);
+					}
+					result.close();
+					jdbcManager.closeStatement();
 				}
-				else{
-					System.out.println("User not signed up ");
+				catch (SQLException e)
+				{
+					e.printStackTrace();
 					RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
 					rd.forward(request, response);
 				}
-				result.close();
-				jdbcManager.closeStatement();
-			}
-			catch (SQLException e)
-			{
-				e.printStackTrace();
-				RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
-				rd.forward(request, response);
-			}
-
+		}
 
 	}
 }

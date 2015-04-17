@@ -15,6 +15,7 @@
 	<form action="signup.jsp">
 		<button type="submit" type="button">Sign Up</button>
 	</form>
+	
 </head>
 <body>
 

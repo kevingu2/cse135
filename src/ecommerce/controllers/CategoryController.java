@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -14,16 +15,24 @@ import ecommerce.model.Category;
 import ecommerce.model.User;
 import ecommerce.util.JDBCManager;
 
-public class CategoryController {
+public class CategoryController extends HttpServlet  {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JDBCManager jdbcManager = null;
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		System.out.println("Category Controller post");
+
 	}
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
+		System.out.println("Category Controller get");
 		jdbcManager = JDBCManager.getInstance();
+		System.out.println("action: "+action);
 		if(action != null && action.equals("update"))
 		{
 			try{
@@ -34,9 +43,9 @@ public class CategoryController {
 				Object[] arr = {name, desc};
 				jdbcManager.update(s, arr);
 
-				arr = null;
+				Object[] arr1 = new Object[0];
 				String s1 = "SELECT * FROM Category";
-				ResultSet rs = jdbcManager.query(s1, arr);
+				ResultSet rs = jdbcManager.query(s1, arr1);
 				ArrayList<Category> list = new ArrayList<Category>();
 				while(rs.next())
 				{
@@ -64,9 +73,9 @@ public class CategoryController {
 				Object[] arr = {name};
 				jdbcManager.update(s, arr);
 
-				arr = null;
+				Object[] arr1 = new Object[0];
 				String s1 = "SELECT * FROM Category";
-				ResultSet rs = jdbcManager.query(s1, arr);
+				ResultSet rs = jdbcManager.query(s1, arr1);
 				ArrayList<Category> list = new ArrayList<Category>();
 				while(rs.next())
 				{
@@ -92,12 +101,13 @@ public class CategoryController {
 				String s = "INSERT INTO Category(name, description) VALUES (?, ?)";
 				String name = request.getParameter("Category Name");
 				String desc = request.getParameter("Description");
+				System.out.println(name + " " + desc);
 				Object[] arr = {name, desc};
 				jdbcManager.update(s, arr);
 
-				arr = null;
+				Object[] arr1 = new Object[0];
 				String s1 = "SELECT * FROM Category";
-				ResultSet rs = jdbcManager.query(s, arr);
+				ResultSet rs = jdbcManager.query(s1, arr1);
 				ArrayList<Category> list = new ArrayList<Category>();
 				while(rs.next())
 				{
@@ -122,7 +132,7 @@ public class CategoryController {
 		{
 			try
 			{
-				Object[] arr = null;
+				Object[] arr = new Object[0];
 				String s = "SELECT * FROM Category";
 				ResultSet rs = jdbcManager.query(s, arr);
 				ArrayList<Category> list = new ArrayList<Category>();
@@ -132,6 +142,8 @@ public class CategoryController {
 					c.setId(rs.getInt("id"));
 					c.setName(rs.getString("name"));
 					c.setDescription(rs.getString("description"));
+					
+					
 					list.add(c);
 				}
 				rs.close();
@@ -149,5 +161,7 @@ public class CategoryController {
 			RequestDispatcher rd = request.getRequestDispatcher("/home.jsp");
 			rd.forward(request, response);
 		}
+		System.out.println("closed statement");
+		jdbcManager.closeStatement();
 	}
 }

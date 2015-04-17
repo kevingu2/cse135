@@ -11,6 +11,7 @@ import java.util.Properties;
 import ecommerce.util.Constants;
 
 public class JDBCManager {
+
     private static JDBCManager jdbcManager = null;
     private static Connection conn=null;
     PreparedStatement st = null; 
@@ -88,12 +89,7 @@ public class JDBCManager {
             } catch (SQLException e ) {
                 e.printStackTrace();
             } finally {
-                if (st != null) { try {
-                    st.close();
-                } catch (SQLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } }
+                
                 return rs;
             }
     }
@@ -132,18 +128,7 @@ public class JDBCManager {
         {
             e.printStackTrace();
         }
-        finally
-        {
-            if (st != null)
-            {
-                try {
-                    st.close();
-                } catch (SQLException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        }
+
     }
     
     private static void closeConnection(){

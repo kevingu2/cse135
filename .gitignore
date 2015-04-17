@@ -3,6 +3,5 @@
 .classpath
 .project
 .settings
-src/ecommerce/util/Constants.java
 build
 WebContent/META-INF

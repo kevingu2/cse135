@@ -51,7 +51,14 @@ public class LoginController extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		jdbcManager = JDBCManager.getInstance();
-
+		if(request.getParameter("action")==null&&request.getParameter("action").equals("signout")){
+			request.getSession().setAttribute("id", null);
+			request.getSession().setAttribute("name", null);
+			request.getSession().setAttribute("age", null);
+			request.getSession().setAttribute("state", null);
+			RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
+			rd.forward(request, response);
+		}
 		String name = request.getParameter("name");
 		Object param[]={name};
 		String query = "select * from userx where name=?";
@@ -60,10 +67,10 @@ public class LoginController extends HttpServlet {
 				
 				ResultSet result=jdbcManager.query(query, param);
 				if(result!=null && result.next()){
-					User user=new User(result.getInt("id"), result.getString("name"),
-							result.getString("role"), result.getInt("age"),
-							result.getString("state"));
-					request.setAttribute("user", user);
+					request.getSession().setAttribute("id", result.getInt("id"));
+					request.getSession().setAttribute("name", result.getString("name"));
+					request.getSession().setAttribute("role", result.getInt("age"));
+					request.getSession().setAttribute("state", result.getString("state"));
 					RequestDispatcher rd = request.getRequestDispatcher("/home.jsp");
 					rd.forward(request, response);
 				}

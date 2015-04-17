@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ecommerce.util.Constants;
 import ecommerce.util.JDBCManager;
 
 public class HomeController extends HttpServlet {
@@ -18,27 +19,18 @@ public class HomeController extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request, 
 		      HttpServletResponse response) throws ServletException, IOException{
-		System.out.println("Get Request");
-		jdbcManager = JDBCManager.getInstance();
-		Object param[]={"testname","testrole",32,"CA" };
-		/*String insert = "INSERT INTO UserX(name, role, age, state) Values(?, ?, ?,?)";
-		if(jdbcManager != null)
+		System.out.println("name: "+request.getSession().getAttribute("name"));
+		if(request.getParameter("action").equals(Constants.CATEGORY))
 		{
-			try
-			{
-				jdbcManager.query(insert, param);
-			}
-			catch (SQLException e)
-			{
-				e.printStackTrace();
-			}
+			RequestDispatcher rd = request.getRequestDispatcher("/category.jsp");
+			rd.forward(request, response);
 		}
-		else
-		{
-			System.out.println("JDBC hasn't been loaded yet.");
+		else if(request.getParameter("action").equals(Constants.PRODUCT)){
+			RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
+			rd.forward(request, response);
 		}
-		RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
-		rd.forward(request, response);*/
+		
+		
 	}
 	
 }

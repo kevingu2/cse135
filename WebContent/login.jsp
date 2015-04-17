@@ -9,6 +9,7 @@
 	<form action="LoginController" method="get">
 		Enter name : <input type="text" name="name"> <BR>
 		<input type="submit" />
+		<input type="hidden" name="action" value="login">
 	</form>
 </body>
 	<form action="signup.jsp">

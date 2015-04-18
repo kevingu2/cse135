@@ -12,8 +12,18 @@
 </head>
 
 <% 
-if(session.getAttribute("role").equals(Constants.OWNER))
+if(session.getAttribute("role")==null)
 {
+	%>
+	<form action="LoginController" method="get">
+	<input type="hidden" value="signout" name="action">
+	<button type="submit" type="button">Login</button></form>
+	</body>
+	<% 
+}
+else if(session.getAttribute("role").equals(Constants.OWNER))
+{
+	System.out.println(session.getAttribute("name"));
 %>
 <body>Products Page
 </body>
@@ -108,7 +118,7 @@ else
 	<input type="hidden" value="home" name="action">
 	<button type="submit" type="button">Home</button></form>
 	
-	<form action="LoginController">
+	<form action="LoginController" method="get">
 	<input type="hidden" value="signout" name="action">
 	<button type="submit" type="button">Sign Out</button></form>
 	</body>

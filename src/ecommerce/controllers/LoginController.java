@@ -52,10 +52,12 @@ public class LoginController extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		jdbcManager = JDBCManager.getInstance();
 		if(request.getParameter("action")==null||request.getParameter("action").equals("signout")){
+			System.out.println("Signout");
 			request.getSession().setAttribute("id", null);
 			request.getSession().setAttribute("name", null);
 			request.getSession().setAttribute("age", null);
 			request.getSession().setAttribute("state", null);
+			request.getSession().setAttribute("role", null);
 			RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
 			rd.forward(request, response);
 		}

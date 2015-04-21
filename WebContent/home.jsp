@@ -26,7 +26,12 @@
 		<input type="hidden" name="action" value="select">
 		</form>
 <%}%>
-
+<%if(session.getAttribute("role").equals(Constants.CUSTOMER)){ %>
+		<form action="ProductBrowsingController" method="get">
+			<button type="submit" type="button">Product Browsing</button>
+			<input type="hidden" name="action" value="select">
+		</form>
+<%}%>
 </html>
 
 <!-- This is from Kevin Gu -->

@@ -12,8 +12,18 @@
 </head>
 
 <% 
-if(session.getAttribute("role").equals(Constants.OWNER))
+if(session.getAttribute("role")==null)
 {
+	%>
+	<form action="LoginController" method="get">
+	<input type="hidden" value="signout" name="action">
+	<button type="submit" type="button">Login</button></form>
+	</body>
+	<% 
+}
+else if(session.getAttribute("role").equals(Constants.OWNER))
+{
+	System.out.println(session.getAttribute("name"));
 %>
 
 <body>Categories Page
@@ -42,7 +52,7 @@ if(session.getAttribute("role").equals(Constants.OWNER))
 			<form action="CategoryController" method="get">
 				<input type="hidden" value="insert" name="action">
 				<th><input value="" name="Category Name" size="50"></th>
-				<th><input value="" name="Description" size="50"></th>
+				<th><textarea name="Description" size="10" maxlength = "500" cols="50" rows ="5"></textarea></th>
 				<th><input type="submit" value="Insert"></th>
 			</form>
 		</tr>
@@ -69,8 +79,7 @@ if(session.getAttribute("role").equals(Constants.OWNER))
 				<td><input value="<%= c.getName() %>" name="Category Name"
 					size="50" readonly></td>
 				<%-- Get the DESCRIPTION --%>
-				<td><input value="<%= c.getDescription() %>" name="Description"
-					size="500"></td>
+				<td><textarea name="Description" size="10" maxlength = "500" cols="50" rows ="5"><%=c.getDescription()%></textarea></td>
 
 				<%-- Button --%>
 				<td><input type="submit" value="Update"></td>
@@ -98,7 +107,7 @@ else
 	<input type="hidden" value="home" name="action">
 	<button type="submit" type="button">Home</button></form>
 	
-	<form action="LoginController">
+	<form action="LoginController" method="get">
 	<input type="hidden" value="signout" name="action">
 	<button type="submit" type="button">Sign Out</button></form>
 	</body>

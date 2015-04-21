@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import ecommerce.model.Category;
 import ecommerce.model.Product;
 import ecommerce.model.User;
 import ecommerce.util.JDBCManager;
@@ -56,6 +57,23 @@ public class ProductController extends HttpServlet {
 				}
 				rs.close();
 				request.setAttribute("result", list);
+				Object[] arr2 = new Object[0];
+				String s2 = "SELECT * FROM Category";
+				ResultSet rs1 = jdbcManager.query(s2, arr2);
+				ArrayList<Category> list1 = new ArrayList<Category>();
+				while(rs1.next())
+				{
+					Category c = new Category();
+					c.setId(rs1.getInt("id"));
+					c.setName(rs1.getString("name"));
+					c.setDescription(rs1.getString("description"));
+					
+					
+					list1.add(c);
+				}
+				rs1.close();
+				request.setAttribute("result1", list1);
+				
 				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
 				rd.forward(request, response);
 			}
@@ -87,6 +105,23 @@ public class ProductController extends HttpServlet {
 				}
 				rs.close();
 				request.setAttribute("result", list);
+				
+				String s2 = "SELECT * FROM Category";
+				ResultSet rs1 = jdbcManager.query(s2, arr1);
+				ArrayList<Category> list1 = new ArrayList<Category>();
+				while(rs1.next())
+				{
+					Category c = new Category();
+					c.setId(rs1.getInt("id"));
+					c.setName(rs1.getString("name"));
+					c.setDescription(rs1.getString("description"));
+					
+					
+					list1.add(c);
+				}
+				rs1.close();
+				request.setAttribute("result1", list1);
+				
 				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
 				rd.forward(request, response);
 			}
@@ -121,6 +156,23 @@ public class ProductController extends HttpServlet {
 				}
 				rs.close();
 				request.setAttribute("result", list);
+				
+				String s2 = "SELECT * FROM Category";
+				ResultSet rs1 = jdbcManager.query(s2, arr1);
+				ArrayList<Category> list1 = new ArrayList<Category>();
+				while(rs1.next())
+				{
+					Category c = new Category();
+					c.setId(rs1.getInt("id"));
+					c.setName(rs1.getString("name"));
+					c.setDescription(rs1.getString("description"));
+					
+					
+					list1.add(c);
+				}
+				rs1.close();
+				request.setAttribute("result1", list1);
+				
 				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
 				rd.forward(request, response);
 			}
@@ -149,6 +201,23 @@ public class ProductController extends HttpServlet {
 				}
 				rs.close();
 				request.setAttribute("result", list);
+				
+				String s1 = "SELECT * FROM Category";
+				ResultSet rs1 = jdbcManager.query(s1, arr);
+				ArrayList<Category> list1 = new ArrayList<Category>();
+				while(rs1.next())
+				{
+					Category c = new Category();
+					c.setId(rs1.getInt("id"));
+					c.setName(rs1.getString("name"));
+					c.setDescription(rs1.getString("description"));
+					
+					
+					list1.add(c);
+				}
+				rs1.close();
+				request.setAttribute("result1", list1);
+				
 				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
 				rd.forward(request, response);
 			}

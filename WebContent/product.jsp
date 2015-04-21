@@ -1,4 +1,5 @@
 <%@ page import="ecommerce.model.Product"%>
+<%@ page import="ecommerce.model.Category"%>
 <%@ page import="ecommerce.model.User" %>
 <%@ page import="java.util.ArrayList"%>
 <%@ page import="ecommerce.util.Constants" %>
@@ -12,8 +13,18 @@
 </head>
 
 <% 
-if(session.getAttribute("role").equals(Constants.OWNER))
+if(session.getAttribute("role")==null)
 {
+	%>
+	<form action="LoginController" method="get">
+	<input type="hidden" value="signout" name="action">
+	<button type="submit" type="button">Login</button></form>
+	</body>
+	<% 
+}
+else if(session.getAttribute("role").equals(Constants.OWNER))
+{
+	System.out.println(session.getAttribute("name"));
 %>
 <body>Products Page
 </body>
@@ -43,7 +54,13 @@ if(session.getAttribute("role").equals(Constants.OWNER))
 				<input type="hidden" value="insert" name="action">
 				<th><input value="" name="SKU" size="50"></th>
 				<th><input value="" name="Name" size="50"></th>
-				<th><input value="" name="Category Name" size="50"></th>
+	<th><select name = "Category Name" id ="Category Name">
+	<%
+	ArrayList<Category> catList = (ArrayList<Category>) request.getAttribute("result1");
+    for(Category c: catList){%>
+	<option value = "<%=c.getName()%>"><%=c.getName()%></option>
+	<% } %>
+	</select></th>
 				<th><input value="" name="Price" size="15"></th>
 				<th><input type="submit" value="Insert"></th>
 			</form>
@@ -76,8 +93,18 @@ if(session.getAttribute("role").equals(Constants.OWNER))
 				<td><input value="<%= p.getName() %>" name="Name"
 					size="50"></td>
 				<%-- Get the CATEGORY NAME --%>
-				<td><input value="<%= p.getCategory_name() %>" name="Category Name"
-					size="50"></td>
+				<td><select name = "Category Name" id ="Category Name">
+	<%
+	ArrayList<Category> catList1 = (ArrayList<Category>) request.getAttribute("result1");
+    for(Category c: catList1){
+    if(p.getCategory_name().equals(c.getName())){%>
+    	<option selected="selected" value = "<%=c.getName()%>"><%=c.getName()%></option>
+    	<%
+    } else {
+    %>
+	<option value = "<%=c.getName()%>"><%=c.getName()%></option>
+	<% }} %>
+	</select></td>
 					<%-- Get the PRICE --%>
 				<td><input value="<%= p.getPrice() %>" name="Price"
 					size="15"></td>
@@ -108,7 +135,7 @@ else
 	<input type="hidden" value="home" name="action">
 	<button type="submit" type="button">Home</button></form>
 	
-	<form action="LoginController">
+	<form action="LoginController" method="get">
 	<input type="hidden" value="signout" name="action">
 	<button type="submit" type="button">Sign Out</button></form>
 	</body>

@@ -108,7 +108,6 @@ public class JDBCManager {
         st = conn.prepareStatement(preparedString);
             for(int i = 0; i < params.length; i++)
             {
-
 				if(params[i].getClass().equals(String.class))
 				{
 					st.setString(i+1, (String) params[i]);

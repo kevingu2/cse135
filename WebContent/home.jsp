@@ -29,7 +29,7 @@
 <%if(session.getAttribute("role").equals(Constants.CUSTOMER)){ %>
 		<form action="ProductBrowsingController" method="get">
 			<button type="submit" type="button">Product Browsing</button>
-			<input type="hidden" name="action" value="select">
+			<input type="hidden" name="action" value="">
 		</form>
 <%}%>
 </html>

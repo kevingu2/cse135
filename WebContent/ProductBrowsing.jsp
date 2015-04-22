@@ -25,6 +25,7 @@
 
 	<table border="1">
 		<tr>
+			<th>Select</th>
 			<th>Category</th>
 			<th>Description</th>
 		</tr>
@@ -37,15 +38,15 @@
                Category c = crs.get(i);
             %>
 		<tr>
-			<form action="CategoryController" method="get">
-				<input type="hidden" value="update" name="action">
-
+			<form action="ProductBrowsingController" method="get">
+				<input type="hidden" value="choose" name="action">
+				<td><button type="submit" type="button">Select</button></td>
 				<%-- Get the CATEGORY NAME --%>
 				<td><input value="<%= c.getName() %>" name="Category Name"
 					size="50" readonly></td>
 				<%-- Get the DESCRIPTION --%>
-				<td><input value="<%= c.getDescription() %>" name="Description"
-					size="500" readonly></td>
+				<td><textarea name="Description"
+					size="10" maxlength = "500" cols = "50" rows = "5" readonly><%= c.getDescription() %></textarea></td>
 			</form>
 		</tr>
 		<%
@@ -58,6 +59,9 @@
 
 	<%-- Add an HTML table header row to format the results --%>
 	<table border="1">
+		<%	if(request.getAttribute("result") != null)
+			{ 
+		%>
 		<tr>
 			<th>SKU</th>
 			<th>Name</th>
@@ -91,8 +95,8 @@
 				<td><input type="submit" value="Order"></td>
 			</form>
 		</tr>
-		<%
-                         }
+		<%             
+            }}
         %>
 	</table>
 </body>

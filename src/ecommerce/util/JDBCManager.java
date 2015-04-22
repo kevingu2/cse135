@@ -8,6 +8,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 
+import org.postgresql.util.PSQLException;
+
 import ecommerce.util.Constants;
 
 public class JDBCManager {
@@ -94,7 +96,7 @@ public class JDBCManager {
             }
     }
     
-    public void update(String preparedString, Object[] params)
+    public void update(String preparedString, Object[] params) throws SQLException
     {
         
         if(JDBCManager.conn == null)
@@ -103,8 +105,6 @@ public class JDBCManager {
              return;
          }
         PreparedStatement st = null;
-        try
-        {
         st = conn.prepareStatement(preparedString);
             for(int i = 0; i < params.length; i++)
             {
@@ -123,11 +123,6 @@ public class JDBCManager {
 				}
             }
             st.executeUpdate();
-        }
-        catch (SQLException e)
-        {
-            e.printStackTrace();
-        }
 
     }
     

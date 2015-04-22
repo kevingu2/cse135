@@ -22,29 +22,42 @@ public class LoginController extends HttpServlet {
 		System.out.println("Post Request");
 		jdbcManager = JDBCManager.getInstance();
 		String name = request.getParameter("name");
+
 		String role = request.getParameter("role");
-		int age = Integer.parseInt(request.getParameter("age"));
+		int age=-1;
+		try{
+			 age = Integer.parseInt(request.getParameter("age"));
+		}catch(Exception e){
+			RequestDispatcher rd = request.getRequestDispatcher("/signupfailure.jsp");
+			rd.forward(request, response);
+		}
 		String state = request.getParameter("state");
 		
 		Object param_select[]={name};
 		String select_query="SELECT * FROM UserX WHERE name=?";
 		ResultSet result=jdbcManager.query(select_query, param_select);
+
 		
 		try {
 			if(!result.next()){
 				Object param_insert[]={name, role, age, state};
 				String insert = "INSERT INTO UserX(name, role, age, state) Values(?, ?, ?,?)";
 				jdbcManager.update(insert, param_insert);
-				jdbcManager.closeStatement();
 			}
 			else{
 				System.out.println("user name taken");
+				RequestDispatcher rd = request.getRequestDispatcher("/signupfailure.jsp");
+				rd.forward(request, response);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			jdbcManager.closeStatement();
+			RequestDispatcher rd = request.getRequestDispatcher("/signupfailure.jsp");
+			rd.forward(request, response);
 		}
-		RequestDispatcher rd = request.getRequestDispatcher("/signup.jsp");
+		jdbcManager.closeStatement();
+		RequestDispatcher rd = request.getRequestDispatcher("/signupsuccess.jsp");
 		rd.forward(request, response);
 	}
 
@@ -70,6 +83,7 @@ public class LoginController extends HttpServlet {
 					
 					ResultSet result=jdbcManager.query(query, param);
 					if(result!=null && result.next()){
+						System.out.println("name: "+result.getString("name"));
 						request.getSession().setAttribute("id", result.getInt("id"));
 						request.getSession().setAttribute("name", result.getString("name"));
 						request.getSession().setAttribute("role", result.getString("role"));
@@ -80,6 +94,7 @@ public class LoginController extends HttpServlet {
 					}
 					else{
 						System.out.println("User not signed up ");
+						request.setAttribute("login",name);
 						RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
 						rd.forward(request, response);
 					}

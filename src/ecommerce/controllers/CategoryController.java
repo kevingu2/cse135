@@ -62,6 +62,9 @@ public class CategoryController extends HttpServlet  {
 			}
 			catch(SQLException e)
 			{
+				request.setAttribute("error","yes");
+				RequestDispatcher rd = request.getRequestDispatcher("/category.jsp");
+				rd.forward(request, response);
 				e.printStackTrace();
 			}
 		}
@@ -92,6 +95,9 @@ public class CategoryController extends HttpServlet  {
 			}
 			catch(SQLException e)
 			{
+				request.setAttribute("error","yes");
+				RequestDispatcher rd = request.getRequestDispatcher("/category.jsp");
+				rd.forward(request, response);
 				e.printStackTrace();
 			}
 		}
@@ -124,6 +130,9 @@ public class CategoryController extends HttpServlet  {
 			}
 			catch(SQLException e)
 			{
+				request.setAttribute("error","yes");
+				RequestDispatcher rd = request.getRequestDispatcher("/category.jsp");
+				rd.forward(request, response);	
 				e.printStackTrace();
 			}
 

@@ -4,10 +4,13 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Hello World</title>
-<jsp:forward page="Welcome.do"/>
+<title>Insert title here</title>
 </head>
 <body>
-
+	<h1>signup failure</h1>
+	<form action="login.jsp">
+		<button type="submit" type="button">login</button></form>
+	<form action="signup.jsp">
+		<button type="submit" type="button">sign up</button></form>
 </body>
 </html>

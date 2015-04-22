@@ -16,6 +16,7 @@
 if(session.getAttribute("role")==null)
 {
 	%>
+		<h1>No user logged in</h1>
 	<form action="LoginController" method="get">
 	<input type="hidden" value="signout" name="action">
 	<button type="submit" type="button">Login</button></form>
@@ -29,6 +30,7 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 <body>Products Page
 </body>
 <body>
+	<h1>Hello <%=session.getAttribute("name") %></h1>
 	<form action="ProductController" method="get">
 	<input type="hidden" value="home" name="action">
 	<button type="submit" type="button">Home</button></form>

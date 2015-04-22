@@ -6,6 +6,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 <body>
+	<%if(request.getAttribute("login")!=null){ %>
+		<h1>The provided name <%=request.getAttribute("login")%> is not known and Please complete the name textbox</h1>
+	<%}%>
 	<form action="LoginController" method="get">
 		Enter name : <input type="text" name="name"> <BR>
 		<input type="submit" />

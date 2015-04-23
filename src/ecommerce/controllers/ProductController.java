@@ -119,7 +119,7 @@ public class ProductController extends HttpServlet {
 				double price = -1;
 				try{
 				sku = Integer.parseInt(request.getParameter("SKU"));
-	
+
 
 				 price = Double.parseDouble(request.getParameter("Price"));
 				}

@@ -31,11 +31,31 @@ public class ShoppingCartController extends HttpServlet {
 		if(action != null && action.equals("insert"))
 		{
 			int sku = Integer.parseInt(request.getParameter("SKU"));
+			int quantity = Integer.parseInt(request.getParameter("Quantity"));
 			String user = (String) request.getSession().getAttribute("name");
 			
-			String command = "INSERT INTO User_Shopping_Cart(name, sku) Values(?,?)";
-			Object[] params = {user, sku};
-			jdbcManager.update(command, params);
+			String check = "SELECT * FROM User_Shopping_Cart WHERE name=? AND sku=?";
+			Object[] checkParams = {user, sku};
+			ResultSet checkRS = jdbcManager.query(check, checkParams);
+			try
+			{
+				if(checkRS.next())
+				{
+					String command = "UPDATE User_Shopping_Cart SET quantity = quantity+1 WHERE name=? and sku=?";
+					jdbcManager.update(command, checkParams);
+				}
+				else
+				{
+					String command = "INSERT INTO User_Shopping_Cart(quantity, name, sku) Values(?,?,?)";
+					Object[] params = {quantity, user, sku};
+					jdbcManager.update(command, params);
+				}
+				checkRS.close();
+			}
+			catch (SQLException e)
+			{
+				e.printStackTrace();
+			}
 			
 			try
 			{

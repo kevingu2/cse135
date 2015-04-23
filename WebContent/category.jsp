@@ -91,12 +91,14 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 				<%-- Button --%>
 				<td><input type="submit" value="Update"></td>
 			</form>
+			<% if(!c.getHasProduct()){ %>
 			<form action="CategoryController" method="get">
 				<input type="hidden" value="delete" name="action"> <input
 					type="hidden" value="<%= c.getName() %>" name="Category Name">
 				<%-- Button --%>
 				<td><input type="submit" value="Delete"></td>
 			</form>
+			<%} %>
 		</tr>
 		<%
                          }

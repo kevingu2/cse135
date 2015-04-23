@@ -26,6 +26,24 @@
   </servlet>
   <servlet>
     <description></description>
+    <display-name>ProductBrowsingController</display-name>
+    <servlet-name>ProductBrowsingController</servlet-name>
+    <servlet-class>ecommerce.controllers.ProductBrowsingController</servlet-class>
+  </servlet>
+  <servlet>
+    <description></description>
+    <display-name>ProductOrderController</display-name>
+    <servlet-name>ProductOrderController</servlet-name>
+    <servlet-class>ecommerce.controllers.ProductOrderController</servlet-class>
+  </servlet>
+  <servlet>
+    <description></description>
+    <display-name>ShoppingCartController</display-name>
+    <servlet-name>ShoppingCartController</servlet-name>
+    <servlet-class>ecommerce.controllers.ShoppingCartController</servlet-class>
+  </servlet>
+  <servlet>
+    <description></description>
     <display-name>ProductController</display-name>
     <servlet-name>ProductController</servlet-name>
     <servlet-class>ecommerce.controllers.ProductController</servlet-class>
@@ -45,6 +63,18 @@
   <servlet-mapping>
     <servlet-name>CategoryController</servlet-name>
     <url-pattern>/CategoryController</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ProductBrowsingController</servlet-name>
+    <url-pattern>/ProductBrowsingController</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ProductOrderController</servlet-name>
+    <url-pattern>/ProductOrderController</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ShoppingCartController</servlet-name>
+    <url-pattern>/ShoppingCartController</url-pattern>
   </servlet-mapping>
     <servlet-mapping>
     <servlet-name>ProductController</servlet-name>

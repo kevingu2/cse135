@@ -25,7 +25,34 @@ if(session.getAttribute("role")==null)
 }
 else if(session.getAttribute("role").equals(Constants.OWNER))
 {
+
+	if(request.getAttribute("error") !=null && request.getAttribute("error").equals("insert error"))
+	{
+		%>
+			<form action="ProductController" method="get">
+	<input type="hidden" value="home" name="action">
+	<button type="submit" type="button">Home</button></form>
+	
+		<form action="CategoryController" method="get">
+	<input type="hidden" value="select" name="action">
+	<button type="submit" type="button">Categories Page</button></form>
+	
+
+	
+	<form action="LoginController">
+	<input type="hidden" value="signout" name="action">
+	<button type="submit" type="button">Sign Out</button></form>
+	
+			<form action="ProductController" method="get">
+	<input type="hidden" value="select" name="action">
+	<button type="submit" type="button">Back</button></form>
+		Failure to insert new product
+		<% 
+	}
+	else
+	{
 	System.out.println(session.getAttribute("name"));
+	
 %>
 <body>Products Page
 </body>
@@ -59,6 +86,7 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 	<th><select name = "Category Name" id ="Category Name">
 	<%
 	ArrayList<Category> catList = (ArrayList<Category>) request.getAttribute("result1");
+	if(catList==null) return;
     for(Category c: catList){%>
 	<option value = "<%=c.getName()%>"><%=c.getName()%></option>
 	<% } %>
@@ -68,8 +96,53 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 			</form>
 		</tr>
 	</table>
+	
+	
+	
+	
+	
+	
 	<br>
 	<table border="1">
+		<tr>
+			<th>Select</th>
+			<th>Category</th>
+			<th>Description</th>
+		</tr>
+
+		<%
+            ArrayList<Category> crs = (ArrayList<Category>) request.getAttribute("result1");
+		    if(crs == null) return;
+            for(int i = 0; i < crs.size(); i++)
+            { 
+               Category c = crs.get(i);
+            %>
+		<tr>
+			<form action="ProductController" method="get">
+				<input type="hidden" value="choose" name="action">
+				<td><button type="submit" type="button">Select</button></td>
+				<%-- Get the CATEGORY NAME --%>
+				<td><input value="<%= c.getName() %>" name="Category Name"
+					size="50" readonly></td>
+				<%-- Get the DESCRIPTION --%>
+				<td><textarea name="Description"
+					size="10" maxlength = "500" cols = "50" rows = "5" readonly><%= c.getDescription() %></textarea></td>
+			</form>
+		</tr>
+		<%
+                         }
+        %>
+        
+        
+        	</table>
+	
+	<br>
+
+	<%-- Add an HTML table header row to format the results --%>
+	<table border="1">
+		<%	if(request.getAttribute("result") != null)
+			{ 
+		%>
 		<tr>
 			<th>SKU</th>
 			<th>Name</th>
@@ -119,15 +192,16 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 					type="hidden" value="<%= p.getSku() %>" name="SKU">
 				<%-- Button --%>
 				<td><input type="submit" value="Delete"></td>
-			</form>
-		</tr>
+			</form></tr>
 		<%
-                         }
+                         }}
         %>
 
 	</table>
+
 </body>
 <%
+	}
 }
 else
 {

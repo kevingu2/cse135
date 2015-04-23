@@ -25,39 +25,25 @@ if(session.getAttribute("role")==null)
 }
 else if(session.getAttribute("role").equals(Constants.OWNER))
 {
-
+	%>
+	<h1>Hello <%=session.getAttribute("name") %></h1>
+	<%
 	if(request.getAttribute("error") !=null && request.getAttribute("error").equals("insert error"))
 	{
-		%>
-			<form action="ProductController" method="get">
-	<input type="hidden" value="home" name="action">
-	<button type="submit" type="button">Home</button></form>
-	
-		<form action="CategoryController" method="get">
-	<input type="hidden" value="select" name="action">
-	<button type="submit" type="button">Categories Page</button></form>
-	
-
-	
-	<form action="LoginController">
-	<input type="hidden" value="signout" name="action">
-	<button type="submit" type="button">Sign Out</button></form>
-	
-			<form action="ProductController" method="get">
-	<input type="hidden" value="select" name="action">
-	<button type="submit" type="button">Back</button></form>
-		Failure to insert new product
-		<% 
+		%><h2>Failure to insert new product</h2><% 
 	}
-	else
+	else if(request.getAttribute("insert success") != null)
 	{
-	System.out.println(session.getAttribute("name"));
+		%><h2>Confirmed: Insert Successful</h2><% 
+	}
+
+	System.out.println("Hello "+ session.getAttribute("name"));
 	
 %>
 <body>Products Page
 </body>
 <body>
-	<h1>Hello <%=session.getAttribute("name") %></h1>
+
 	<form action="ProductController" method="get">
 	<input type="hidden" value="home" name="action">
 	<button type="submit" type="button">Home</button></form>
@@ -201,7 +187,7 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 
 </body>
 <%
-	}
+	
 }
 else
 {

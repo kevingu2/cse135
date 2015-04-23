@@ -11,9 +11,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.sun.corba.se.impl.orbutil.closure.Constant;
+
 import ecommerce.model.Category;
 import ecommerce.model.Product;
 import ecommerce.model.User;
+import ecommerce.util.Constants;
 import ecommerce.util.JDBCManager;
 
 public class ProductController extends HttpServlet {
@@ -181,14 +184,13 @@ public class ProductController extends HttpServlet {
 				catch(Exception e)
 				{
 					request.setAttribute("error" , "insert error");
-					RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
-					rd.forward(request, response);
 					e.printStackTrace();
 				}
 
 				String cat = request.getParameter("Category Name");
 				Object[] arr = {name, sku, cat, price};
 				jdbcManager.update(s, arr);
+				request.setAttribute("insert success", "insert success");
 
 
 			}
@@ -217,7 +219,6 @@ public class ProductController extends HttpServlet {
 				rs1.close();
 				request.setAttribute("result1", list1);
 
-				
 				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
 				rd.forward(request, response);
 				}

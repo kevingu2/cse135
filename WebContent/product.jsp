@@ -34,7 +34,12 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 	}
 	else if(request.getAttribute("insert success") != null)
 	{
-		%><h2>Confirmed: Insert Successful</h2><% 
+		Product p = (Product) request.getAttribute("inserted");
+		%><h2>Confirmed: Product Inserted: SKU: <%= p.getSku() %>, Name: <%= p.getName() %>, Category: <%= p.getCategory_name() %>, Price: <%= p.getPrice() %></h2><% 
+	}
+	else if(request.getAttribute("update error") != null || request.getAttribute("delete error") != null)
+	{
+		%><h2>Update failure</h2><% 
 	}
 
 	System.out.println("Hello "+ session.getAttribute("name"));
@@ -84,8 +89,29 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 	</table>
 	
 	
-	
-	
+	<br>
+	<table border="1">
+		<tr>
+			<th>Category</th>
+			<th>Name</th>
+			<th>Search</th>
+		</tr>
+	<tr>
+			<form action="ProductController" method="get">
+				<input type="hidden" value="search" name="action">
+	<th><select name = "Category Name" id ="Category Name">
+	<%
+	ArrayList<Category> catList12 = (ArrayList<Category>) request.getAttribute("result1");
+	if(catList12==null) return;
+    for(Category c: catList12){%>
+	<option value = "<%=c.getName()%>"><%=c.getName()%></option>
+	<% } %>
+	</select></th>
+				<th><input value="" name="Name" size="50"></th>
+				<th><input type="submit" value="Search"></th>
+			</form>
+		</tr>
+	</table>
 	
 	
 	<br>
@@ -119,7 +145,10 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
                          }
         %>
         
-        
+        <tr>	<form action="ProductController" method="get">
+				<input type="hidden" value="choose all" name="action">
+				<td><button type="submit" type="button">Select All</button></td>
+				</form></tr>
         	</table>
 	
 	<br>
@@ -128,6 +157,7 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 	<table border="1">
 		<%	if(request.getAttribute("result") != null)
 			{ 
+
 		%>
 		<tr>
 			<th>SKU</th>
@@ -137,8 +167,10 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 		</tr>
 
 		<%
-            ArrayList<Product> rs = (ArrayList<Product>) request.getAttribute("result");
+		   ArrayList<Product> rs  = (ArrayList<Product>) request.getAttribute("result");
+		    
 		    if(rs == null) return;
+
             for(int i = 0; i < rs.size(); i++)
             { 
                Product p = rs.get(i);

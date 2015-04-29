@@ -58,11 +58,10 @@ public class ProductController extends HttpServlet {
 				jdbcManager.update(s, arr);
 
 
-
 			}
 			catch(SQLException e)
 			{
-				request.setAttribute("error" , "error");
+				request.setAttribute("update error" , "error");
 				e.printStackTrace();
 			}
 			finally
@@ -84,6 +83,32 @@ public class ProductController extends HttpServlet {
 				}
 				rs1.close();
 				request.setAttribute("result1", list1);
+				
+				if(request.getSession().getAttribute("s") != null)
+				{
+					String oldS = (String)request.getSession().getAttribute("s");
+					Object[] oldArr = (Object[])request.getSession().getAttribute("arr");
+					ResultSet oldRes = jdbcManager.query(oldS, oldArr);
+					
+					ArrayList<Product> list = new ArrayList<Product>();
+					try {
+					while(oldRes.next())
+					{
+						Product p = new Product();
+						p.setName(oldRes.getString("name"));
+						p.setSku(oldRes.getInt("SKU"));
+						p.setCategory_name(oldRes.getString("category_name"));
+						p.setPrice(oldRes.getDouble("price"));
+						list.add(p);
+					}
+				
+						oldRes.close();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					request.setAttribute("result", list);
+				}
 
 				
 				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
@@ -118,7 +143,8 @@ public class ProductController extends HttpServlet {
 			}
 			catch(SQLException e)
 			{
-				request.setAttribute("error" , "error");
+				request.setAttribute("delete error" , "error");
+				
 				e.printStackTrace();
 			}
 			finally
@@ -141,6 +167,31 @@ public class ProductController extends HttpServlet {
 				rs1.close();
 				request.setAttribute("result1", list1);
 
+				if(request.getSession().getAttribute("s") != null)
+				{
+					String oldS = (String)request.getSession().getAttribute("s");
+					Object[] oldArr = (Object[])request.getSession().getAttribute("arr");
+					ResultSet oldRes = jdbcManager.query(oldS, oldArr);
+					
+					ArrayList<Product> list = new ArrayList<Product>();
+					try {
+					while(oldRes.next())
+					{
+						Product p = new Product();
+						p.setName(oldRes.getString("name"));
+						p.setSku(oldRes.getInt("SKU"));
+						p.setCategory_name(oldRes.getString("category_name"));
+						p.setPrice(oldRes.getDouble("price"));
+						list.add(p);
+					}
+				
+						oldRes.close();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					request.setAttribute("result", list);
+				}
 				
 				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
 				rd.forward(request, response);
@@ -177,19 +228,26 @@ public class ProductController extends HttpServlet {
 				double price = -1;
 				try{
 				sku = Integer.parseInt(request.getParameter("SKU"));
-
+	
 
 				 price = Double.parseDouble(request.getParameter("Price"));
 				}
 				catch(Exception e)
 				{
 					request.setAttribute("error" , "insert error");
+				
 					e.printStackTrace();
 				}
 
 				String cat = request.getParameter("Category Name");
 				Object[] arr = {name, sku, cat, price};
 				jdbcManager.update(s, arr);
+				Product p = new Product();
+				p.setName(name);
+				p.setSku(sku);
+				p.setCategory_name(cat);
+				p.setPrice(price);
+				request.setAttribute("inserted", p);
 				request.setAttribute("insert success", "insert success");
 
 
@@ -197,6 +255,31 @@ public class ProductController extends HttpServlet {
 			catch(SQLException e)
 			{
 				request.setAttribute("error" , "insert error");
+				if(request.getSession().getAttribute("s") != null)
+				{
+					String oldS = (String)request.getSession().getAttribute("s");
+					Object[] oldArr = (Object[])request.getSession().getAttribute("arr");
+					ResultSet oldRes = jdbcManager.query(oldS, oldArr);
+					
+					ArrayList<Product> list = new ArrayList<Product>();
+					try {
+					while(oldRes.next())
+					{
+						Product p = new Product();
+						p.setName(oldRes.getString("name"));
+						p.setSku(oldRes.getInt("SKU"));
+						p.setCategory_name(oldRes.getString("category_name"));
+						p.setPrice(oldRes.getDouble("price"));
+						list.add(p);
+					}
+				
+						oldRes.close();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					request.setAttribute("result", list);
+				}
 				e.printStackTrace();
 			}
 			finally
@@ -218,6 +301,32 @@ public class ProductController extends HttpServlet {
 				}
 				rs1.close();
 				request.setAttribute("result1", list1);
+				
+				if(request.getSession().getAttribute("s") != null)
+				{
+					String oldS = (String)request.getSession().getAttribute("s");
+					Object[] oldArr = (Object[])request.getSession().getAttribute("arr");
+					ResultSet oldRes = jdbcManager.query(oldS, oldArr);
+					
+					ArrayList<Product> list = new ArrayList<Product>();
+					try {
+					while(oldRes.next())
+					{
+						Product p = new Product();
+						p.setName(oldRes.getString("name"));
+						p.setSku(oldRes.getInt("SKU"));
+						p.setCategory_name(oldRes.getString("category_name"));
+						p.setPrice(oldRes.getDouble("price"));
+						list.add(p);
+					}
+				
+						oldRes.close();
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+					request.setAttribute("result", list);
+				}
 
 				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
 				rd.forward(request, response);
@@ -251,7 +360,8 @@ public class ProductController extends HttpServlet {
 				}
 				rs1.close();
 				request.setAttribute("result1", list1);
-				
+                request.getSession().setAttribute("s", s1);
+                request.getSession().setAttribute("arr", arr);
 				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
 				rd.forward(request, response);
 			}
@@ -310,7 +420,153 @@ public class ProductController extends HttpServlet {
 				rs.close();
 
 				
+                request.getSession().setAttribute("s", s);
+                request.getSession().setAttribute("arr", arr);
+				request.setAttribute("cresult", clist);
+				request.setAttribute("result", list);
+			}
+			catch(SQLException e)
+			{
+				request.setAttribute("error" , "error");
+				e.printStackTrace();
+			}
+			finally
+			{
+				try{
+				Object[] arr2 = new Object[0];
+				String s2 = "SELECT * FROM Category";
+				ResultSet rs1 = jdbcManager.query(s2, arr2);
+				ArrayList<Category> list1 = new ArrayList<Category>();
+				while(rs1.next())
+				{
+					Category c = new Category();
+					c.setId(rs1.getInt("id"));
+					c.setName(rs1.getString("name"));
+					c.setDescription(rs1.getString("description"));
+					
+					
+					list1.add(c);
+				}
+				rs1.close();
+				request.setAttribute("result1", list1);
+
+				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
+				rd.forward(request, response);
+				}
+				catch(Exception e)
+				{
+					
+				}
+			}
+		}
+		else if(action!=null && action.equals("choose all"))
+		{
+			try
+			{
+				Object[] arr = new Object[0];
+
+				String s = "SELECT * FROM Product";
+				String sc = "SELECT * FROM Category";
+				ResultSet crs = jdbcManager.query(sc, arr);
+				ResultSet rs = jdbcManager.query(s, arr);
+				ArrayList<Category> clist = new ArrayList<Category>();
+				ArrayList<Product> list = new ArrayList<Product>();
+				while(rs.next())
+				{
+					Product p = new Product();
+					p.setName(rs.getString("name"));
+					p.setSku(rs.getInt("SKU"));
+					p.setCategory_name(rs.getString("category_name"));
+					p.setPrice(rs.getDouble("price"));
+					list.add(p);
+				}
+				while(crs.next())
+				{
+					Category c = new Category();
+					c.setId(crs.getInt("id"));
+					c.setName(crs.getString("name"));
+					c.setDescription(crs.getString("description"));
+					clist.add(c);
+				}
+				crs.close();
+				rs.close();
+
 				
+                request.getSession().setAttribute("s", s);
+                request.getSession().setAttribute("arr", arr);
+				request.setAttribute("cresult", clist);
+				request.setAttribute("result", list);
+			}
+			catch(SQLException e)
+			{
+				request.setAttribute("error" , "error");
+				e.printStackTrace();
+			}
+			finally
+			{
+				try{
+				Object[] arr2 = new Object[0];
+				String s2 = "SELECT * FROM Category";
+				ResultSet rs1 = jdbcManager.query(s2, arr2);
+				ArrayList<Category> list1 = new ArrayList<Category>();
+				while(rs1.next())
+				{
+					Category c = new Category();
+					c.setId(rs1.getInt("id"));
+					c.setName(rs1.getString("name"));
+					c.setDescription(rs1.getString("description"));
+					
+					
+					list1.add(c);
+				}
+				rs1.close();
+				request.setAttribute("result1", list1);
+
+				
+				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
+				rd.forward(request, response);
+				}
+				catch(Exception e)
+				{
+					
+				}
+			}
+		}
+		else if(action != null && action.equals("search"))
+		{
+			try
+			{
+				Object[] arr = {"%"+request.getParameter("Name")+"%",request.getParameter("Category Name")};
+                Object[] carr = new Object[0];
+				String s = "SELECT * FROM Product WHERE name LIKE ? AND category_name = ?";
+				String sc = "SELECT * FROM Category";
+				ResultSet crs = jdbcManager.query(sc, carr);
+				ResultSet rs = jdbcManager.query(s, arr);
+				ArrayList<Category> clist = new ArrayList<Category>();
+				ArrayList<Product> list = new ArrayList<Product>();
+				while(rs.next())
+				{
+					Product p = new Product();
+					p.setName(rs.getString("name"));
+					p.setSku(rs.getInt("SKU"));
+					p.setCategory_name(rs.getString("category_name"));
+					p.setPrice(rs.getDouble("price"));
+					list.add(p);
+				}
+				while(crs.next())
+				{
+					Category c = new Category();
+					c.setId(crs.getInt("id"));
+					c.setName(crs.getString("name"));
+					c.setDescription(crs.getString("description"));
+					clist.add(c);
+				}
+				crs.close();
+				rs.close();
+
+				
+                request.getSession().setAttribute("s", s);
+                request.getSession().setAttribute("arr", arr);
 				request.setAttribute("cresult", clist);
 				request.setAttribute("result", list);
 			}

@@ -19,6 +19,10 @@
 	<input type="hidden" value="home" name="action">
 	<button type="submit" type="button">Home</button></form>
 	
+	<form action="ShoppingCartController" method="get">
+	<input type="hidden" value="cart" name="action">
+	<button type="submit" type="button">View Cart</button></form>
+	
 	<form action="LoginController">
 	<input type="hidden" value="signout" name="action">
 	<button type="submit" type="button">Sign Out</button></form>

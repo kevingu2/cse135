@@ -33,6 +33,16 @@ public class ProductController extends HttpServlet {
 		if(action != null && action.equals("update"))
 		{
 			try{
+				String s7 = "SELECT COUNT(*) as size FROM Product WHERE SKU = ?";
+				Object[] arr7 = {Integer.parseInt(request.getParameter("SKU"))};
+				ResultSet rs7 = jdbcManager.query(s7, arr7);
+				rs7.next();
+				if(rs7.getInt("size")==0)
+				{
+					throw new SQLException();
+				}
+				
+				
 				String s =  "UPDATE Product SET name = ?, category_name = ?, price = ?" +
 						"WHERE SKU = ?";
 				String name = request.getParameter("Name");
@@ -45,6 +55,16 @@ public class ProductController extends HttpServlet {
 				jdbcManager.update(s, arr);
 
 
+
+			}
+			catch(SQLException e)
+			{
+				request.setAttribute("error" , "error");
+				e.printStackTrace();
+			}
+			finally
+			{
+				try{
 				Object[] arr2 = new Object[0];
 				String s2 = "SELECT * FROM Category";
 				ResultSet rs1 = jdbcManager.query(s2, arr2);
@@ -61,30 +81,49 @@ public class ProductController extends HttpServlet {
 				}
 				rs1.close();
 				request.setAttribute("result1", list1);
+
 				
 				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
 				rd.forward(request, response);
-			}
-			catch(SQLException e)
-			{
-				request.setAttribute("error" , "error");
-				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
-				rd.forward(request, response);
-				e.printStackTrace();
+				}
+				catch(Exception e)
+				{
+					
+				}
 			}
 		}
 		else if (action != null && action.equals("delete"))
 		{
 			try{
+				String s7 = "SELECT COUNT(*) as size FROM Product WHERE SKU = ?";
+				Object[] arr7 = {Integer.parseInt(request.getParameter("SKU"))};
+				ResultSet rs7 = jdbcManager.query(s7, arr7);
+				rs7.next();
+				if(rs7.getInt("size")==0)
+				{
+					throw new SQLException();
+				}
+				
+				
 				String s =  "DELETE FROM Product WHERE SKU = ?";
 				int sku = Integer.parseInt(request.getParameter("SKU"));
 				Object[] arr = {sku};
 				jdbcManager.update(s, arr);
 
-				Object[] arr1 = new Object[0];
-				
+
+
+			}
+			catch(SQLException e)
+			{
+				request.setAttribute("error" , "error");
+				e.printStackTrace();
+			}
+			finally
+			{
+				try{
+				Object[] arr2 = new Object[0];
 				String s2 = "SELECT * FROM Category";
-				ResultSet rs1 = jdbcManager.query(s2, arr1);
+				ResultSet rs1 = jdbcManager.query(s2, arr2);
 				ArrayList<Category> list1 = new ArrayList<Category>();
 				while(rs1.next())
 				{
@@ -98,21 +137,37 @@ public class ProductController extends HttpServlet {
 				}
 				rs1.close();
 				request.setAttribute("result1", list1);
+
 				
 				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
 				rd.forward(request, response);
-			}
-			catch(SQLException e)
-			{
-				request.setAttribute("error" , "error");
-				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
-				rd.forward(request, response);
-				e.printStackTrace();
+				}
+				catch(Exception e)
+				{
+					
+				}
 			}
 		}
 		else if (action != null && action.equals("insert"))
 		{
 			try{
+				
+				if(request.getParameter("Category Name") == null)
+				{
+					throw new SQLException();
+				}
+				else
+				{
+					String s7 = "SELECT COUNT(*) as size FROM Category WHERE name = ?";
+					Object[] arr7 = {request.getParameter("Category Name")};
+					ResultSet rs7 = jdbcManager.query(s7, arr7);
+					rs7.next();
+					if(rs7.getInt("size")==0)
+					{
+						throw new SQLException();
+					}
+				}
+				
 				String s = "INSERT INTO Product(name, SKU, category_name, price) VALUES (?,?, ?, ?)";
 				String name = request.getParameter("Name");
 				int sku = -1;
@@ -136,10 +191,18 @@ public class ProductController extends HttpServlet {
 				jdbcManager.update(s, arr);
 
 
-				Object[] arr1 = new Object[0];
-				
+			}
+			catch(SQLException e)
+			{
+				request.setAttribute("error" , "insert error");
+				e.printStackTrace();
+			}
+			finally
+			{
+				try{
+				Object[] arr2 = new Object[0];
 				String s2 = "SELECT * FROM Category";
-				ResultSet rs1 = jdbcManager.query(s2, arr1);
+				ResultSet rs1 = jdbcManager.query(s2, arr2);
 				ArrayList<Category> list1 = new ArrayList<Category>();
 				while(rs1.next())
 				{
@@ -153,16 +216,15 @@ public class ProductController extends HttpServlet {
 				}
 				rs1.close();
 				request.setAttribute("result1", list1);
+
 				
 				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
 				rd.forward(request, response);
-			}
-			catch(SQLException e)
-			{
-				request.setAttribute("error" , "insert error");
-				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
-				rd.forward(request, response);
-				e.printStackTrace();
+				}
+				catch(Exception e)
+				{
+					
+				}
 			}
 
 		}
@@ -209,6 +271,15 @@ public class ProductController extends HttpServlet {
 		{
 			try
 			{
+				String s7 = "SELECT COUNT(*) as size FROM Category WHERE name = ?";
+				Object[] arr7 = {request.getParameter("Category Name")};
+				ResultSet rs7 = jdbcManager.query(s7, arr7);
+				rs7.next();
+				if(rs7.getInt("size")==0)
+				{
+					request.setAttribute("error","yes");
+				}
+				
 				Object[] arr = {request.getParameter("Category Name")};
 				Object[] carr = new Object[0];
 				String s = "SELECT * FROM Product WHERE category_name = ?";
@@ -236,11 +307,23 @@ public class ProductController extends HttpServlet {
 				}
 				crs.close();
 				rs.close();
+
 				
+				
+				request.setAttribute("cresult", clist);
+				request.setAttribute("result", list);
+			}
+			catch(SQLException e)
+			{
+				request.setAttribute("error" , "error");
+				e.printStackTrace();
+			}
+			finally
+			{
+				try{
 				Object[] arr2 = new Object[0];
-				
-				String s1 = "SELECT * FROM Category";
-				ResultSet rs1 = jdbcManager.query(s1, arr2);
+				String s2 = "SELECT * FROM Category";
+				ResultSet rs1 = jdbcManager.query(s2, arr2);
 				ArrayList<Category> list1 = new ArrayList<Category>();
 				while(rs1.next())
 				{
@@ -254,19 +337,15 @@ public class ProductController extends HttpServlet {
 				}
 				rs1.close();
 				request.setAttribute("result1", list1);
+
 				
-				
-				request.setAttribute("cresult", clist);
-				request.setAttribute("result", list);
 				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
 				rd.forward(request, response);
-			}
-			catch(SQLException e)
-			{
-				request.setAttribute("error" , "error");
-				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
-				rd.forward(request, response);
-				e.printStackTrace();
+				}
+				catch(Exception e)
+				{
+					
+				}
 			}
 		}
 		jdbcManager.closeStatement();

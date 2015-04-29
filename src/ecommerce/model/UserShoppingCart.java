@@ -4,6 +4,8 @@ public class UserShoppingCart {
 	private int id;
 	private String name;
 	private int SKU;
+	private int quantity;
+	
 	public int getId() {
 		return id;
 	}
@@ -21,5 +23,13 @@ public class UserShoppingCart {
 	}
 	public void setSKU(int sKU) {
 		SKU = sKU;
+	}
+	public int getQuantity()
+	{
+		return quantity;
+	}
+	public void setQuantity(int quantity)
+	{
+		this.quantity = quantity;
 	}
 }

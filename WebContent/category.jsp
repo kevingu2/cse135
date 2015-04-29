@@ -15,6 +15,7 @@
 if(session.getAttribute("role")==null)
 {
 	%>
+	<h1>No user logged in</h1>
 	<form action="LoginController" method="get">
 	<input type="hidden" value="signout" name="action">
 	<button type="submit" type="button">Login</button></form>
@@ -24,9 +25,15 @@ if(session.getAttribute("role")==null)
 else if(session.getAttribute("role").equals(Constants.OWNER))
 {
 	System.out.println(session.getAttribute("name"));
+		
 %>
+	<%if( request.getAttribute("error")!=null){ %>
+		<h1>data modification error</h1>
+	<%}%>
 
-<body>Categories Page
+<body>
+<h1>Categories Page</h1>
+<h2>Hello <%=session.getAttribute("name") %></h2>
 </body>
 
 <body>
@@ -84,12 +91,14 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 				<%-- Button --%>
 				<td><input type="submit" value="Update"></td>
 			</form>
+			<% if(!c.getHasProduct()){ %>
 			<form action="CategoryController" method="get">
 				<input type="hidden" value="delete" name="action"> <input
 					type="hidden" value="<%= c.getName() %>" name="Category Name">
 				<%-- Button --%>
 				<td><input type="submit" value="Delete"></td>
 			</form>
+			<%} %>
 		</tr>
 		<%
                          }

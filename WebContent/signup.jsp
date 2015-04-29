@@ -19,15 +19,10 @@
 	<option value = "<%=Constants.CUSTOMER %>">Customer</option></select>
 	<br>
 	Age:<br>
-	<select name = "age" id ="age">
-	<%for(int i = 0; i < 150; i++)
-    {%>
-	<option value = "<%=i%>"><%=i%></option>
-	<% } %>
-	</select>
+		<input type="text" name="age">
 	<br>
 	State:<br>
-	<select name = "role" id ="role">
+	<select name = "state" id ="state">
 	<option value = "AL">AL</option>
 	<option value = "AK">AK</option>
 	<option value = "AZ">AZ</option>

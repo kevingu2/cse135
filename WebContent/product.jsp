@@ -16,6 +16,7 @@
 if(session.getAttribute("role")==null)
 {
 	%>
+		<h1>No user logged in</h1>
 	<form action="LoginController" method="get">
 	<input type="hidden" value="signout" name="action">
 	<button type="submit" type="button">Login</button></form>
@@ -56,6 +57,7 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 <body>Products Page
 </body>
 <body>
+	<h1>Hello <%=session.getAttribute("name") %></h1>
 	<form action="ProductController" method="get">
 	<input type="hidden" value="home" name="action">
 	<button type="submit" type="button">Home</button></form>
@@ -84,6 +86,7 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 	<th><select name = "Category Name" id ="Category Name">
 	<%
 	ArrayList<Category> catList = (ArrayList<Category>) request.getAttribute("result1");
+	if(catList==null) return;
     for(Category c: catList){%>
 	<option value = "<%=c.getName()%>"><%=c.getName()%></option>
 	<% } %>
@@ -189,8 +192,7 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 					type="hidden" value="<%= p.getSku() %>" name="SKU">
 				<%-- Button --%>
 				<td><input type="submit" value="Delete"></td>
-			</form>
-		</tr>
+			</form></tr>
 		<%
                          }}
         %>

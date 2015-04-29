@@ -41,8 +41,9 @@ public class ShoppingCartController extends HttpServlet {
 			{
 				if(checkRS.next())
 				{
-					String command = "UPDATE User_Shopping_Cart SET quantity = quantity+1 WHERE name=? and sku=?";
-					jdbcManager.update(command, checkParams);
+					String command = "UPDATE User_Shopping_Cart SET quantity = quantity+? WHERE name=? and sku=?";
+					Object[] updateParams = {quantity, user, sku};
+					jdbcManager.update(command, updateParams);
 				}
 				else
 				{
@@ -95,7 +96,59 @@ public class ShoppingCartController extends HttpServlet {
 			{
 				e.printStackTrace();
 			}
-			jdbcManager.closeStatement();
+		}
+		else if(action != null && action.equals("order"))
+		{
+			ArrayList<UserShoppingCart> clist = (ArrayList<UserShoppingCart>) request.getSession().getAttribute("clist");
+			ArrayList<Product> plist = (ArrayList<Product>) request.getSession().getAttribute("plist");
+			for(int i = 0; i < clist.size(); i++)
+			{
+				UserShoppingCart c = clist.get(i);
+				Product p = plist.get(i);
+				
+				String pname = p.getName();
+				int sku = p.getSku();
+				String category = p.getCategory_name();
+				Double price = p.getPrice();
+				Object[] farr = {pname, sku, category, price};
+				
+				try
+				{
+					String find = "SELECT * FROM Purchased_Product WHERE name=? AND sku=? AND category_name=? AND price=?";
+					ResultSet search = jdbcManager.query(find, farr);
+					if(!search.next())
+					{
+						String addP = "INSERT INTO Purchased_Product(name,sku,category_name,price) VALUES(?,?,?,?)";
+						jdbcManager.update(addP, farr);
+						search = jdbcManager.query(find, farr);
+						search.next();
+					}
+					
+					String name = c.getName();
+					int quantity = c.getQuantity();
+					int superku = search.getInt("id");
+					Object[] oarr = {quantity,name,superku};
+					String order = "INSERT INTO User_Purchased_Product(quantity,time_stamp,name,SKU) VALUES(?,now(),?,?)";
+					jdbcManager.update(order, oarr);
+					
+					int uid = c.getId();
+					Object[] delarr = {uid};
+					String del = "DELETE FROM User_Shopping_Cart WHERE id=?";
+					jdbcManager.update(del, delarr);
+				}
+				catch(SQLException e)
+				{
+					e.printStackTrace();
+				}
+			}
+			request.setAttribute("clist", clist);
+			request.setAttribute("plist", plist);
+			request.getSession().setAttribute("clist", null);
+			request.getSession().setAttribute("plist", null);
+			
+			request.setAttribute("status", "complete");
+			RequestDispatcher rd = request.getRequestDispatcher("/OrderConfirmation.jsp");
+			rd.forward(request, response);
 		}
 		else if(action != null && action.equals("home"))
 		{
@@ -108,5 +161,67 @@ public class ShoppingCartController extends HttpServlet {
 	
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		
+		String action = request.getParameter("action");
+		jdbcManager = JDBCManager.getInstance();
+		
+		if(action != null && action.equals("cart"))
+		{
+			try
+			{
+				String user = (String) request.getSession().getAttribute("name");
+				//System.out.println("Retrieving shopping cart for " + user);
+				
+				Object[] arr = {user};
+				String sc = "SELECT * FROM User_Shopping_Cart WHERE name = ?";
+				ResultSet crs = jdbcManager.query(sc, arr);
+				ArrayList<UserShoppingCart> clist = new ArrayList<UserShoppingCart>();
+				
+				while(crs.next())
+				{
+					UserShoppingCart u = new UserShoppingCart();
+					
+					u.setId(crs.getInt("id"));
+					u.setName(crs.getString("name"));
+					u.setQuantity(crs.getInt("quantity"));
+					u.setSKU(crs.getInt("sku"));
+					clist.add(u);
+				}
+				crs.close();
+				
+				ArrayList<Product> plist = new ArrayList<Product>();
+				for(int i = 0; i < clist.size(); i++)
+				{
+					Object[] itemArr = {clist.get(i).getSKU()};
+					String itemGet = "SELECT * FROM Product WHERE sku = ?";
+					ResultSet irs = jdbcManager.query(itemGet, itemArr);
+					while(irs.next())
+					{
+						Product p = new Product();
+						p.setName(irs.getString("name"));
+						p.setSku(irs.getInt("sku"));
+						p.setPrice(irs.getFloat("price"));
+						p.setCategory_name(irs.getString("category_name"));
+						plist.add(p);
+					}
+					irs.close();
+				}
+				
+				request.setAttribute("cresult", clist);
+				request.setAttribute("presult", plist);
+				RequestDispatcher rd = request.getRequestDispatcher("/ShoppingCart.jsp");
+				rd.forward(request, response);
+			}
+			catch(SQLException e)
+			{
+				e.printStackTrace();
+			}
+		}
+		else if(action != null && action.equals("home"))
+		{
+			RequestDispatcher rd = request.getRequestDispatcher("/home.jsp");
+			rd.forward(request, response);
+		}
+		jdbcManager.closeStatement();
 	}
 }

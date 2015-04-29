@@ -125,6 +125,29 @@ public class JDBCManager {
 
     }
     
+    private static void startPacket()
+    {
+    	try
+    	{
+    		conn.setAutoCommit(false);
+    	}
+    	catch (SQLException e)
+    	{
+    		e.printStackTrace();
+    	}
+    }
+    private static void sendPacket()
+    {
+    	try
+    	{
+    		conn.commit();
+    		conn.setAutoCommit(true);
+    	}
+    	catch (SQLException e)
+    	{
+    		e.printStackTrace();
+    	}
+    }
     private static void closeConnection(){
         try {
             conn.close();

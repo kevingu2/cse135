@@ -70,6 +70,8 @@ public class ProductBrowsingController extends HttpServlet
 			}
 			catch(SQLException e)
 			{
+				RequestDispatcher rd = request.getRequestDispatcher("/ProductBrowsing.jsp");
+				rd.forward(request, response);
 				e.printStackTrace();
 			}
 		}
@@ -193,6 +195,8 @@ public class ProductBrowsingController extends HttpServlet
 			}
 			catch(SQLException e)
 			{
+				RequestDispatcher rd = request.getRequestDispatcher("/ProductBrowsing.jsp");
+				rd.forward(request, response);
 				e.printStackTrace();
 			}
 		}

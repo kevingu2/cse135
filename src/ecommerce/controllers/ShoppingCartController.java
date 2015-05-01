@@ -52,55 +52,61 @@ public class ShoppingCartController extends HttpServlet {
 					jdbcManager.update(command, params);
 				}
 				checkRS.close();
+				request.setAttribute("insert success", true);
 			}
 			catch (SQLException e)
 			{
+				request.setAttribute("insert failure", true);
 				e.printStackTrace();
 			}
-			
-			try
+			finally
 			{
-				Object[] arr = new Object[0];
-				Object[] carr = new Object[0];
-				String s = "SELECT * FROM Product";
-				String sc = "SELECT * FROM Category";
-				ResultSet crs = jdbcManager.query(sc, carr);
-				ResultSet rs = jdbcManager.query(s, arr);
-				ArrayList<Category> clist = new ArrayList<Category>();
-				ArrayList<Product> list = new ArrayList<Product>();
-				while(rs.next())
+				try
 				{
-					Product p = new Product();
-					p.setName(rs.getString("name"));
-					p.setSku(rs.getInt("SKU"));
-					p.setCategory_name(rs.getString("category_name"));
-					p.setPrice(rs.getDouble("price"));
-					list.add(p);
+					Object[] arr = new Object[0];
+					Object[] carr = new Object[0];
+					String s = "SELECT * FROM Product";
+					String sc = "SELECT * FROM Category";
+					ResultSet crs = jdbcManager.query(sc, carr);
+					ResultSet rs = jdbcManager.query(s, arr);
+					ArrayList<Category> clist = new ArrayList<Category>();
+					ArrayList<Product> list = new ArrayList<Product>();
+					while(rs.next())
+					{
+						Product p = new Product();
+						p.setName(rs.getString("name"));
+						p.setSku(rs.getInt("SKU"));
+						p.setCategory_name(rs.getString("category_name"));
+						p.setPrice(rs.getDouble("price"));
+						list.add(p);
+					}
+					while(crs.next())
+					{
+						Category c = new Category();
+						c.setId(crs.getInt("id"));
+						c.setName(crs.getString("name"));
+						c.setDescription(crs.getString("description"));
+						clist.add(c);
+					}
+					crs.close();
+					rs.close();
+					request.setAttribute("cresult", clist);
+					request.setAttribute("result", list);
+					RequestDispatcher rd = request.getRequestDispatcher("/ProductBrowsing.jsp");
+					rd.forward(request, response);
 				}
-				while(crs.next())
+				catch(SQLException e)
 				{
-					Category c = new Category();
-					c.setId(crs.getInt("id"));
-					c.setName(crs.getString("name"));
-					c.setDescription(crs.getString("description"));
-					clist.add(c);
+					e.printStackTrace();
 				}
-				crs.close();
-				rs.close();
-				request.setAttribute("cresult", clist);
-				request.setAttribute("result", list);
-				RequestDispatcher rd = request.getRequestDispatcher("/ProductBrowsing.jsp");
-				rd.forward(request, response);
-			}
-			catch(SQLException e)
-			{
-				e.printStackTrace();
 			}
 		}
 		else if(action != null && action.equals("order"))
 		{
+			String destination = "/OrderConfirmation.jsp";
 			ArrayList<UserShoppingCart> clist = (ArrayList<UserShoppingCart>) request.getSession().getAttribute("clist");
 			ArrayList<Product> plist = (ArrayList<Product>) request.getSession().getAttribute("plist");
+			jdbcManager.startPacket();
 			for(int i = 0; i < clist.size(); i++)
 			{
 				UserShoppingCart c = clist.get(i);
@@ -138,9 +144,14 @@ public class ShoppingCartController extends HttpServlet {
 				}
 				catch(SQLException e)
 				{
+					destination = "/ShoppingCart.jsp";
+					request.setAttribute("cresult", clist);
+					request.setAttribute("presult", plist);
+					request.setAttribute("error", "error");
 					e.printStackTrace();
 				}
 			}
+			jdbcManager.sendPacket();
 			request.setAttribute("clist", clist);
 			request.setAttribute("plist", plist);
 			request.getSession().setAttribute("clist", null);

@@ -125,7 +125,7 @@ public class JDBCManager {
 
     }
     
-    private static void startPacket()
+    public void startPacket()
     {
     	try
     	{
@@ -136,7 +136,7 @@ public class JDBCManager {
     		e.printStackTrace();
     	}
     }
-    private static void sendPacket()
+    public void sendPacket()
     {
     	try
     	{

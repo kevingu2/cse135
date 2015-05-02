@@ -20,6 +20,12 @@
 	<input type="hidden" value="signout" name="action">
 	<button type="submit" type="button">Login</button></form>
 	</body>
+<%}else if(request.getAttribute("toProductBrowsing")==null){ %>
+	<h1>Bad page access. Please try again or follow a valid link to this page.</h1>
+	<form action="LoginController" method="get">
+	<input type="hidden" value="signout" name="action">
+	<button type="submit" type="button">Login</button></form>
+	</body>
 <%}else{ %>
 <body>
 	<form action="ProductController" method="get">
@@ -43,7 +49,9 @@
 	<%}else if(request.getAttribute("insert failure") != null){
 		%><h2>Error while inserting product into cart.  Please try again.</h2>
 		<br>
-	<% } %>
+	<% }else if(request.getAttribute("get failure") != null){ %>
+		<h2>Error while getting product info. Please try again.</h2>
+	<%} %>
 	<table border="1">
 		<tr>
 			<th>Category</th>

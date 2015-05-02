@@ -19,6 +19,12 @@
 	<input type="hidden" value="signout" name="action">
 	<button type="submit" type="button">Login</button></form>
 	</body>
+<%}else if(request.getAttribute("toShoppingCart")==null){ %>
+	<h1>Bad page access. Please try again or follow a valid link to this page.</h1>
+	<form action="LoginController" method="get">
+	<input type="hidden" value="signout" name="action">
+	<button type="submit" type="button">Login</button></form>
+	</body>
 <%}else{%>
 <body>Your Shopping Cart
 </body>
@@ -109,7 +115,7 @@
 	</table>
 	
 	<br>
-	
+<%if(crs.size() > 0){ %>
 	<table border="1">
 		<tr>
 			<th>Cart Total</th>
@@ -123,6 +129,9 @@
 				<td><button type="submit" type="button">Purchase</button></td>
 		</tr>
 	</table>
+<%}else{%>
+	<h1>Shopping Cart Empty</h1>
+<%} %>
 </body>
 <%} %>
 </html>

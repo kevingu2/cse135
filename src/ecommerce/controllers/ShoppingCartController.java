@@ -30,15 +30,16 @@ public class ShoppingCartController extends HttpServlet {
 		
 		if(action != null && action.equals("insert"))
 		{
-			int sku = Integer.parseInt(request.getParameter("SKU"));
-			int quantity = Integer.parseInt(request.getParameter("Quantity"));
-			String user = (String) request.getSession().getAttribute("name");
-			
-			String check = "SELECT * FROM User_Shopping_Cart WHERE name=? AND sku=?";
-			Object[] checkParams = {user, sku};
-			ResultSet checkRS = jdbcManager.query(check, checkParams);
 			try
 			{
+				int sku = Integer.parseInt(request.getParameter("SKU"));
+				int quantity = Integer.parseInt(request.getParameter("Quantity"));
+				String user = (String) request.getSession().getAttribute("name");
+				
+				String check = "SELECT * FROM User_Shopping_Cart WHERE name=? AND sku=?";
+				Object[] checkParams = {user, sku};
+				ResultSet checkRS = jdbcManager.query(check, checkParams);
+				
 				if(checkRS.next())
 				{
 					String command = "UPDATE User_Shopping_Cart SET quantity = quantity+? WHERE name=? and sku=?";
@@ -53,6 +54,11 @@ public class ShoppingCartController extends HttpServlet {
 				}
 				checkRS.close();
 				request.setAttribute("insert success", true);
+			}
+			catch (NumberFormatException e)
+			{
+				request.setAttribute("insert failure", true);
+				e.printStackTrace();
 			}
 			catch (SQLException e)
 			{
@@ -91,7 +97,8 @@ public class ShoppingCartController extends HttpServlet {
 					crs.close();
 					rs.close();
 					request.setAttribute("cresult", clist);
-					request.setAttribute("result", list);
+					//request.setAttribute("result", list);
+					request.setAttribute("toProductBrowsing", true);
 					RequestDispatcher rd = request.getRequestDispatcher("/ProductBrowsing.jsp");
 					rd.forward(request, response);
 				}
@@ -220,11 +227,15 @@ public class ShoppingCartController extends HttpServlet {
 				
 				request.setAttribute("cresult", clist);
 				request.setAttribute("presult", plist);
+				request.setAttribute("toShoppingCart", true);
 				RequestDispatcher rd = request.getRequestDispatcher("/ShoppingCart.jsp");
 				rd.forward(request, response);
 			}
 			catch(SQLException e)
 			{
+				request.setAttribute("ShoppingCartError", true);
+				RequestDispatcher rd = request.getRequestDispatcher("/home.jsp");
+				rd.forward(request, response);
 				e.printStackTrace();
 			}
 		}

@@ -65,6 +65,7 @@ public class ProductBrowsingController extends HttpServlet
 				//rs.close();
 				request.setAttribute("cresult", clist);
 				//request.setAttribute("result", list);
+				request.setAttribute("toProductBrowsing", true);
 				RequestDispatcher rd = request.getRequestDispatcher("/ProductBrowsing.jsp");
 				rd.forward(request, response);
 			}
@@ -142,7 +143,7 @@ public class ProductBrowsingController extends HttpServlet
 					rs1.close();
 					request.setAttribute("cresult", list1);
 
-					
+					request.setAttribute("toProductBrowsing", true);
 					RequestDispatcher rd = request.getRequestDispatcher("/ProductBrowsing.jsp");
 					rd.forward(request, response);
 					}
@@ -190,6 +191,7 @@ public class ProductBrowsingController extends HttpServlet
 				rs.close();
 				request.setAttribute("cresult", clist);
 				request.setAttribute("result", list);
+				request.setAttribute("toProductBrowsing", true);
 				RequestDispatcher rd = request.getRequestDispatcher("/ProductBrowsing.jsp");
 				rd.forward(request, response);
 			}

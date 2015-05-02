@@ -15,7 +15,15 @@
 <body>Order Confirmation Page
 </body>
 
+<br>
+
 <body>
+<%if(request.getAttribute("status")==null || !request.getAttribute("status").equals("complete")){%>
+	<h1>Invalid access of Order Confirmation Page</h1>
+	<form action="LoginController">
+	<input type="hidden" value="signout" name="action">
+	<button type="submit" type="button">Sign Out</button></form>
+<%}else{ %>
 	<form action="ProductController" method="get">
 	<input type="hidden" value="home" name="action">
 	<button type="submit" type="button">Home</button></form>
@@ -28,9 +36,9 @@
 	<form action="LoginController">
 	<input type="hidden" value="signout" name="action">
 	<button type="submit" type="button">Sign Out</button></form>
-<%if(request.getAttribute("status")==null || !request.getAttribute("status").equals("complete")){%>
-	<body>Invalid access of Order Confirmation Page</body>
-<%}else{ %>
+
+	<br>
+
 	<table border="1">
 		<tr><th colspan="5">Items Purchased</th></tr>
 		<tr>

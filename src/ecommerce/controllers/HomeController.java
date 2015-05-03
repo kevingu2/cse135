@@ -16,9 +16,17 @@ public class HomeController extends HttpServlet {
 
 	private static final long serialVersionUID = 1L;
 	private JDBCManager jdbcManager = null;
+
+	protected void doPost(HttpServletRequest request, 
+		      HttpServletResponse response) throws ServletException, IOException{
+		request.setAttribute("linked", true);	
+		RequestDispatcher rd = request.getRequestDispatcher("/home.jsp");
+		rd.forward(request, response);
+	}
 	
 	protected void doGet(HttpServletRequest request, 
 		      HttpServletResponse response) throws ServletException, IOException{
+		request.setAttribute("linked", true);
 		System.out.println("name: "+request.getSession().getAttribute("name"));
 		String action=request.getParameter("");
 		if(action==null){

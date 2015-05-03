@@ -20,11 +20,11 @@
 <body>
 <%if(request.getAttribute("status")==null || !request.getAttribute("status").equals("complete")){%>
 	<h1>Invalid access of Order Confirmation Page</h1>
-	<form action="LoginController">
-	<input type="hidden" value="signout" name="action">
-	<button type="submit" type="button">Sign Out</button></form>
+	<form action="HomeController" method = "post">
+	<button type="submit" type="button">Home</button></form>
 <%}else{ %>
-	<form action="ProductController" method="get">
+	<h1>Hello <%=session.getAttribute("name") %></h1>
+	<form action="ProductController" method="post">
 	<input type="hidden" value="home" name="action">
 	<button type="submit" type="button">Home</button></form>
 	

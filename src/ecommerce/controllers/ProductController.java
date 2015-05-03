@@ -27,10 +27,12 @@ public class ProductController extends HttpServlet {
 	private JDBCManager jdbcManager = null;
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		request.setAttribute("linked", true);
 	}
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		request.setAttribute("linked", true);
 		String action = request.getParameter("action");
 		jdbcManager = JDBCManager.getInstance();
 		if(action != null && action.equals("update"))
@@ -59,7 +61,7 @@ public class ProductController extends HttpServlet {
 
 
 			}
-			catch(SQLException e)
+			catch(Exception e)
 			{
 				request.setAttribute("update error" , "error");
 				e.printStackTrace();
@@ -141,7 +143,7 @@ public class ProductController extends HttpServlet {
 
 
 			}
-			catch(SQLException e)
+			catch(Exception e)
 			{
 				request.setAttribute("delete error" , "error");
 				
@@ -252,7 +254,7 @@ public class ProductController extends HttpServlet {
 
 
 			}
-			catch(SQLException e)
+			catch(Exception e)
 			{
 				request.setAttribute("error" , "insert error");
 				if(request.getSession().getAttribute("s") != null)
@@ -536,9 +538,22 @@ public class ProductController extends HttpServlet {
 		{
 			try
 			{
-				Object[] arr = {"%"+request.getParameter("Name")+"%",request.getParameter("Category Name")};
+				String s;
+				Object[] arr;
+				if(request.getParameter("Category Name").equals("All"))
+				{
+					s = "SELECT * FROM Product WHERE name LIKE ?";
+					arr = new Object[1];
+					arr[0] = "%"+request.getParameter("Name")+"%";
+				}
+				else
+				{
+					s = "SELECT * FROM Product WHERE name LIKE ? AND category_name = ?";
+					arr = new Object[2];
+					arr[0] = "%"+request.getParameter("Name")+"%";
+					arr[1] = request.getParameter("Category Name");
+				} 
                 Object[] carr = new Object[0];
-				String s = "SELECT * FROM Product WHERE name LIKE ? AND category_name = ?";
 				String sc = "SELECT * FROM Category";
 				ResultSet crs = jdbcManager.query(sc, carr);
 				ResultSet rs = jdbcManager.query(s, arr);

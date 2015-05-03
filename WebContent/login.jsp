@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Login</title>
 <body>
 	<%if(request.getAttribute("login")!=null){ %>
 		<h1>The provided name <%=request.getAttribute("login")%> is not known and Please complete the name textbox</h1>
@@ -15,7 +15,8 @@
 		<input type="hidden" name="action" value="login">
 	</form>
 </body>
-	<form action="signup.jsp">
+	<form action="LoginController" method ="get">
+	<input type="hidden" name="action" value="signup">
 		<button type="submit" type="button">Sign Up</button>
 	</form>
 	

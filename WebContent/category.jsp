@@ -22,6 +22,13 @@ if(session.getAttribute("role")==null)
 	</body>
 	<% 
 }
+
+else if(request.getAttribute("linked")==null){ %>
+	<h1>Bad page access. Please try again or follow a valid link to this page.</h1>
+	<form action="HomeController" method="post">
+	<button type="submit" type="button">Home</button></form>
+	</body>
+<% }
 else if(session.getAttribute("role").equals(Constants.OWNER))
 {
 	System.out.println(session.getAttribute("name"));

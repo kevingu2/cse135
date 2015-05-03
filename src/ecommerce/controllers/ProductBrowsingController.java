@@ -23,10 +23,12 @@ public class ProductBrowsingController extends HttpServlet
 	
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		request.setAttribute("linked", true);
 	}
 	
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		request.setAttribute("linked", true);
 		String action = request.getParameter("action");
 		jdbcManager = JDBCManager.getInstance();
 

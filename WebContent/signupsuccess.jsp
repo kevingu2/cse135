@@ -4,8 +4,16 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Sign Up Success</title>
 </head>
+<% 
+if(request.getAttribute("linked")==null){ %>
+	<h1>Bad page access. Please try again or follow a valid link to this page.</h1>
+	<form action="HomeController" method = "post">
+	<button type="submit" type="button">Home</button></form>
+	</body>
+<%
+return; }%>
 <body>
 	<h1>You have successfully signed up</h1>
 	<form action="login.jsp">

@@ -26,6 +26,14 @@ if(session.getAttribute("role")==null)
 else if(session.getAttribute("role").equals(Constants.OWNER))
 {
 	%>
+	<% 
+if(request.getAttribute("linked")==null){ %>
+	<h1>Bad page access. Please try again or follow a valid link to this page.</h1>
+	<form action="HomeController" method = "post">
+	<button type="submit" type="button">Home</button></form>
+	</body>
+<%
+return; }%>
 	<h1>Hello <%=session.getAttribute("name") %></h1>
 	<%
 	if(request.getAttribute("error") !=null && request.getAttribute("error").equals("insert error"))
@@ -100,12 +108,15 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 			<form action="ProductController" method="get">
 				<input type="hidden" value="search" name="action">
 	<th><select name = "Category Name" id ="Category Name">
+	<option value = "All">ALL</option>
 	<%
 	ArrayList<Category> catList12 = (ArrayList<Category>) request.getAttribute("result1");
 	if(catList12==null) return;
     for(Category c: catList12){%>
+    
 	<option value = "<%=c.getName()%>"><%=c.getName()%></option>
 	<% } %>
+	
 	</select></th>
 				<th><input value="" name="Name" size="50"></th>
 				<th><input type="submit" value="Search"></th>

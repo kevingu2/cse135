@@ -25,6 +25,7 @@ public class ShoppingCartController extends HttpServlet {
 	
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		request.setAttribute("linked", true);
 		String action = request.getParameter("action");
 		jdbcManager = JDBCManager.getInstance();
 		

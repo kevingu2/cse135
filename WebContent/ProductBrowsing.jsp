@@ -22,11 +22,11 @@
 	</body>
 <%}else if(request.getAttribute("toProductBrowsing")==null){ %>
 	<h1>Bad page access. Please try again or follow a valid link to this page.</h1>
-	<form action="LoginController" method="get">
-	<input type="hidden" value="signout" name="action">
-	<button type="submit" type="button">Login</button></form>
+	<form action="HomeController" method="post">
+	<button type="submit" type="button">Home</button></form>
 	</body>
 <%}else{ %>
+<h1>Hello <%=session.getAttribute("name") %></h1>
 <body>
 	<form action="ProductController" method="get">
 	<input type="hidden" value="home" name="action">
@@ -72,6 +72,7 @@
 						for(Category c: catList){%>
 							<option value="<%=c.getName() %>"><%=c.getName() %></option>
 						<% } %>
+						<option value = "All">All Categories</option>
 					</select>
 				</th>
 				<th><input value="" name="Name" size="50"></th>

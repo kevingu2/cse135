@@ -21,11 +21,11 @@
 	</body>
 <%}else if(request.getAttribute("toShoppingCart")==null){ %>
 	<h1>Bad page access. Please try again or follow a valid link to this page.</h1>
-	<form action="LoginController" method="get">
-	<input type="hidden" value="signout" name="action">
-	<button type="submit" type="button">Login</button></form>
+	<form action="HomeController" method="post">
+	<button type="submit" type="button">Home</button></form>
 	</body>
 <%}else{%>
+<h1>Hello <%=session.getAttribute("name") %></h1>
 <body>Your Shopping Cart
 </body>
 <body>

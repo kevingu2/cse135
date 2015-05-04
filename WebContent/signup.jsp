@@ -6,12 +6,20 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Sign Up</title>
-
 </head>
+<% 
+if(request.getAttribute("linked")==null){ %>
+	<h1>Bad page access. Please try again or follow a valid link to this page.</h1>
+	<form action="HomeController" method="post">
+	<button type="submit" type="button">Home</button></form>
+	</body>
+<%}else{%>
+
+
 <body>
 	<form action="LoginController" method="post">
 	Name:<br>
-	<input type="text" name="name">
+	<input type="text" name="name" maxlength="50">
 	<br>
 	Role:<br>
 	<select name = "role" id ="role">
@@ -80,4 +88,5 @@
 	<form action="login.jsp">
 		<button type="submit" type="button">Cancel</button></form>
 </body>
+<%} %>
 </html>

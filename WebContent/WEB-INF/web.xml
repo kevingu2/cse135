@@ -3,7 +3,7 @@
   <display-name>ecommerce</display-name>
     <welcome-file-list>
 	<welcome-file>
-		/LoginController
+		index.jsp
 	</welcome-file>
   </welcome-file-list>
    <servlet>

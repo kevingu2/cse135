@@ -4,13 +4,23 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Sign Up Failure</title>
 </head>
+<% 
+if(request.getAttribute("linked")==null){ %>
+	<h1>Bad page access. Please try again or follow a valid link to this page.</h1>
+	<form action="HomeController" method = "post">
+	<button type="submit" type="button">Home</button></form>
+	</body>
+<%
+return; }%>
 <body>
 	<h1>signup failure</h1>
 	<form action="login.jsp">
 		<button type="submit" type="button">login</button></form>
-	<form action="signup.jsp">
-		<button type="submit" type="button">sign up</button></form>
+	<form action="LoginController" method ="get">
+	<input type="hidden" name="action" value="signup">
+		<button type="submit" type="button">Sign Up</button>
+	</form>
 </body>
 </html>

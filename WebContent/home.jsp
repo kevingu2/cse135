@@ -6,12 +6,21 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Home</title>
 </head>
+
 <body>
-	<%if(session.getAttribute("name")!=null){ %>
+	<%if(session.getAttribute("name")!=null){ 
+	%><% 
+if(request.getAttribute("linked")==null){ %>
+	<h1>Bad page access. Please try again or follow a valid link to this page.</h1>
+	<form action="HomeController" method= "post">
+	<button type="submit" type="button">Home</button></form>
+	</body>
+<%
+return; }%>
 			<h1>Hello <%=session.getAttribute("name") %></h1>
-		<form action="login.jsp">
+		<form action="LoginController" method="get">
 			<input type="hidden" value="signout" name="action">
 			<button type="submit" type="button">Sign Out</button>
 		</form>
@@ -25,8 +34,26 @@
 				<button type="submit" type="button">Products</button>
 				<input type="hidden" name="action" value="select">
 				</form>
+				<form action="ProductBrowsingController" method="get">
+				<button type="submit" type="button">Product Browsing</button>
+				<input type="hidden" name="action" value="select">
+				</form>
+				
+				<!-- Added these buttons under the assumption that
+						owners had access to all customer pages -->
+				<form action="ShoppingCartController" method="get">
+				<input type="hidden" value="cart" name="action">
+				<button type="submit" type="button">View Cart</button></form>
+		
 		<%}%>
 		<%if(session.getAttribute("role").equals(Constants.CUSTOMER)){ %>
+		<%	if(request.getAttribute("ShoppingCartError")!=null){%>
+				<h1>Error retrieving shopping cart. Please try again</h1>
+		<%	} %>
+			<form action="ShoppingCartController" method="get">
+			<input type="hidden" value="cart" name="action">
+			<button type="submit" type="button">View Cart</button></form>
+		
 			<form action="ProductBrowsingController" method="get">
 				<button type="submit" type="button">Product Browsing</button>
 				<input type="hidden" name="action" value="select">
@@ -37,7 +64,7 @@
 		<form action="LoginController" method="get">
 		<input type="hidden" value="signout" name="action">
 		<button type="submit" type="button">Login</button></form>
-	<%} %>
+	<% }%>
 </body>
 </html>
 

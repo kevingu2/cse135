@@ -22,6 +22,13 @@ if(session.getAttribute("role")==null)
 	</body>
 	<% 
 }
+
+else if(request.getAttribute("linked")==null){ %>
+	<h1>Bad page access. Please try again or follow a valid link to this page.</h1>
+	<form action="HomeController" method="post">
+	<button type="submit" type="button">Home</button></form>
+	</body>
+<% }
 else if(session.getAttribute("role").equals(Constants.OWNER))
 {
 	System.out.println(session.getAttribute("name"));
@@ -58,7 +65,7 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 		<tr>
 			<form action="CategoryController" method="get">
 				<input type="hidden" value="insert" name="action">
-				<th><input value="" name="Category Name" size="50"></th>
+				<th><input value="" name="Category Name" size="50" maxlength = "50"></th>
 				<th><textarea name="Description" size="10" maxlength = "500" cols="50" rows ="5"></textarea></th>
 				<th><input type="submit" value="Insert"></th>
 			</form>

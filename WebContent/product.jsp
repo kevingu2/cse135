@@ -26,6 +26,14 @@ if(session.getAttribute("role")==null)
 else if(session.getAttribute("role").equals(Constants.OWNER))
 {
 	%>
+	<% 
+if(request.getAttribute("linked")==null){ %>
+	<h1>Bad page access. Please try again or follow a valid link to this page.</h1>
+	<form action="HomeController" method = "post">
+	<button type="submit" type="button">Home</button></form>
+	</body>
+<%
+return; }%>
 	<h1>Hello <%=session.getAttribute("name") %></h1>
 	<%
 	if(request.getAttribute("error") !=null && request.getAttribute("error").equals("insert error"))
@@ -34,10 +42,12 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 	}
 	else if(request.getAttribute("insert success") != null)
 	{
-		Product p = (Product) request.getAttribute("insert success");
-		%>
-		<h2>Confirmed: Inserted Product Name: <%=p.getName() %>, SKU: <%=p.getSku() %>, 
-			Category Name: <%=p.getCategory_name() %>, Price: <%=p.getPrice() %> Successful</h2><%
+		Product p = (Product) request.getAttribute("inserted");
+		%><h2>Confirmed: Product Inserted: SKU: <%= p.getSku() %>, Name: <%= p.getName() %>, Category: <%= p.getCategory_name() %>, Price: <%= p.getPrice() %></h2><% 
+	}
+	else if(request.getAttribute("update error") != null || request.getAttribute("delete error") != null)
+	{
+		%><h2>Update failure</h2><% 
 	}
 
 	System.out.println("Hello "+ session.getAttribute("name"));
@@ -71,7 +81,7 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 			<form action="ProductController" method="get">
 				<input type="hidden" value="insert" name="action">
 				<th><input value="" name="SKU" size="50"></th>
-				<th><input value="" name="Name" size="50"></th>
+				<th><input value="" name="Name" size="50" maxlength = "50"></th>
 	<th><select name = "Category Name" id ="Category Name">
 	<%
 	ArrayList<Category> catList = (ArrayList<Category>) request.getAttribute("result1");
@@ -88,31 +98,32 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 	
 	
 	<br>
-	
-	<table border ="1">
-	<tr>
-			<th>Name</th>
-			<th>Category</th>
-		</tr>
+
+	<table border="1">
 		<tr>
+			<th>Category</th>
+			<th>Name</th>
+			<th>Search</th>
+		</tr>
+	<tr>
 			<form action="ProductController" method="get">
 				<input type="hidden" value="search" name="action">
-				<th><input value="" name="Name" size="50"></th>
 	<th><select name = "Category Name" id ="Category Name">
+	<option value = "All">ALL</option>
 	<%
-	if(catList==null) return;
-    for(Category c: catList){%>
+	ArrayList<Category> catList12 = (ArrayList<Category>) request.getAttribute("result1");
+	if(catList12==null) return;
+    for(Category c: catList12){%>
+    
 	<option value = "<%=c.getName()%>"><%=c.getName()%></option>
 	<% } %>
+	
 	</select></th>
+				<th><input value="" name="Name" size="50"></th>
 				<th><input type="submit" value="Search"></th>
 			</form>
 		</tr>
 	</table>
-	
-
-	
-	
 	
 	<br>
 	<table border="1">
@@ -144,13 +155,11 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 		<%
                          }
         %>
-        				<tr>
-				<form action="ProductController" method="get">
-				<input type="hidden" value="select all" name="action">
-				<%-- Button --%>
-				<td><input type="submit" value="Select All"></td>
-			</form></tr>
         
+        <tr>	<form action="ProductController" method="get">
+				<input type="hidden" value="choose all" name="action">
+				<td><button type="submit" type="button">Select All</button></td>
+				</form></tr>
         	</table>
 	
 	<br>
@@ -159,6 +168,7 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 	<table border="1">
 		<%	if(request.getAttribute("result") != null)
 			{ 
+
 		%>
 		<tr>
 			<th>SKU</th>
@@ -168,9 +178,9 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 		</tr>
 
 		<%
-            ArrayList<Product> rs = (ArrayList<Product>) request.getAttribute("result");
+		   ArrayList<Product> rs  = (ArrayList<Product>) request.getAttribute("result");
+		    
 		    if(rs == null) return;
-		    request.setAttribute("old result", rs);
             for(int i = 0; i < rs.size(); i++)
             { 
                Product p = rs.get(i);

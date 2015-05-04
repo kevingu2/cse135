@@ -24,11 +24,13 @@ public class CategoryController extends HttpServlet  {
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Category Controller post");
+		request.setAttribute("linked", true);
 
 	}
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		request.setAttribute("linked", true);
 		String action = request.getParameter("action");
 		System.out.println("Category Controller get");
 		jdbcManager = JDBCManager.getInstance();

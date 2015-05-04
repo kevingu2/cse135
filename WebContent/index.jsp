@@ -4,8 +4,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Hello World</title>
-<jsp:forward page="Welcome.do"/>
+<title>Login</title>
+<jsp:forward page="/login.jsp"/>
 </head>
 <body>
 

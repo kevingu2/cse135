@@ -19,6 +19,7 @@ public class LoginController extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		request.setAttribute("linked", true);
 		System.out.println("Post Request");
 		jdbcManager = JDBCManager.getInstance();
 		String name = request.getParameter("name");
@@ -30,6 +31,7 @@ public class LoginController extends HttpServlet {
 		}catch(Exception e){
 			RequestDispatcher rd = request.getRequestDispatcher("/signupfailure.jsp");
 			rd.forward(request, response);
+			return;
 		}
 		String state = request.getParameter("state");
 		
@@ -37,32 +39,38 @@ public class LoginController extends HttpServlet {
 		String select_query="SELECT * FROM UserX WHERE name=?";
 		ResultSet result=jdbcManager.query(select_query, param_select);
 
-		
+		RequestDispatcher rd = null;
 		try {
 			if(!result.next()){
 				Object param_insert[]={name, role, age, state};
 				String insert = "INSERT INTO UserX(name, role, age, state) Values(?, ?, ?,?)";
 				jdbcManager.update(insert, param_insert);
+
+				rd = request.getRequestDispatcher("/signupsuccess.jsp");
+		
 			}
 			else{
 				System.out.println("user name taken");
-				RequestDispatcher rd = request.getRequestDispatcher("/signupfailure.jsp");
-				rd.forward(request, response);
+				rd = request.getRequestDispatcher("/signupfailure.jsp");
+		
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-			jdbcManager.closeStatement();
-			RequestDispatcher rd = request.getRequestDispatcher("/signupfailure.jsp");
+			rd = request.getRequestDispatcher("/signupfailure.jsp");
+			
+		}
+		finally
+		{
 			rd.forward(request, response);
 		}
+
 		jdbcManager.closeStatement();
-		RequestDispatcher rd = request.getRequestDispatcher("/signupsuccess.jsp");
-		rd.forward(request, response);
 	}
 
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		request.setAttribute("linked", true);
 		jdbcManager = JDBCManager.getInstance();
 		if(request.getParameter("action")==null||request.getParameter("action").equals("signout")){
 			System.out.println("Signout");
@@ -74,7 +82,13 @@ public class LoginController extends HttpServlet {
 			RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
 			rd.forward(request, response);
 		}
-		else{
+		else if(request.getParameter("action").equals("signup"))
+		{
+			RequestDispatcher rd = request.getRequestDispatcher("/signup.jsp");
+			rd.forward(request, response);
+		}
+		else
+		{
 			String name = request.getParameter("name");
 			Object param[]={name};
 			String query = "select * from userx where name=?";
@@ -91,6 +105,7 @@ public class LoginController extends HttpServlet {
 						request.getSession().setAttribute("state", result.getString("state"));
 						RequestDispatcher rd = request.getRequestDispatcher("/home.jsp");
 						rd.forward(request, response);
+						result.close();
 					}
 					else{
 						System.out.println("User not signed up ");
@@ -98,8 +113,6 @@ public class LoginController extends HttpServlet {
 						RequestDispatcher rd = request.getRequestDispatcher("/login.jsp");
 						rd.forward(request, response);
 					}
-					result.close();
-					jdbcManager.closeStatement();
 				}
 				catch (SQLException e)
 				{
@@ -109,5 +122,6 @@ public class LoginController extends HttpServlet {
 				}
 		}
 
+		jdbcManager.closeStatement();
 	}
 }

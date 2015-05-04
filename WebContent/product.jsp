@@ -34,7 +34,10 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 	}
 	else if(request.getAttribute("insert success") != null)
 	{
-		%><h2>Confirmed: Insert Successful</h2><% 
+		Product p = (Product) request.getAttribute("insert success");
+		%>
+		<h2>Confirmed: Inserted Product Name: <%=p.getName() %>, SKU: <%=p.getSku() %>, 
+			Category Name: <%=p.getCategory_name() %>, Price: <%=p.getPrice() %> Successful</h2><%
 	}
 
 	System.out.println("Hello "+ session.getAttribute("name"));
@@ -84,7 +87,30 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 	</table>
 	
 	
+	<br>
 	
+	<table border ="1">
+	<tr>
+			<th>Name</th>
+			<th>Category</th>
+		</tr>
+		<tr>
+			<form action="ProductController" method="get">
+				<input type="hidden" value="search" name="action">
+				<th><input value="" name="Name" size="50"></th>
+	<th><select name = "Category Name" id ="Category Name">
+	<%
+	if(catList==null) return;
+    for(Category c: catList){%>
+	<option value = "<%=c.getName()%>"><%=c.getName()%></option>
+	<% } %>
+	</select></th>
+				<th><input type="submit" value="Search"></th>
+			</form>
+		</tr>
+	</table>
+	
+
 	
 	
 	
@@ -118,7 +144,12 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 		<%
                          }
         %>
-        
+        				<tr>
+				<form action="ProductController" method="get">
+				<input type="hidden" value="select all" name="action">
+				<%-- Button --%>
+				<td><input type="submit" value="Select All"></td>
+			</form></tr>
         
         	</table>
 	
@@ -139,6 +170,7 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 		<%
             ArrayList<Product> rs = (ArrayList<Product>) request.getAttribute("result");
 		    if(rs == null) return;
+		    request.setAttribute("old result", rs);
             for(int i = 0; i < rs.size(); i++)
             { 
                Product p = rs.get(i);
@@ -179,11 +211,14 @@ else if(session.getAttribute("role").equals(Constants.OWNER))
 				<%-- Button --%>
 				<td><input type="submit" value="Delete"></td>
 			</form></tr>
+
 		<%
                          }}
+		
         %>
 
 	</table>
+	
 
 </body>
 <%

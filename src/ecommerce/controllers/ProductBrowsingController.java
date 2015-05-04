@@ -29,7 +29,10 @@ public class ProductBrowsingController extends HttpServlet
 			HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
 		jdbcManager = JDBCManager.getInstance();
-
+		if(request.getAttribute("old result")!= null)
+		{
+			request.setAttribute("result", request.getAttribute("old result"));
+		}
 		if (action != null && action.equals("select"))
 		{
 			try

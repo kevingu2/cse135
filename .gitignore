@@ -6,3 +6,4 @@
 src/ecommerce/util/Constants.java
 build
 WebContent/META-INF
+src/ecommerce/util/DatabaseInfo.java

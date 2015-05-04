@@ -33,6 +33,11 @@ public class ProductController extends HttpServlet {
 			HttpServletResponse response) throws ServletException, IOException {
 		String action = request.getParameter("action");
 		jdbcManager = JDBCManager.getInstance();
+		if(request.getAttribute("old result")!= null)
+		{
+			System.out.println(" There is old result");
+			request.setAttribute("result", request.getAttribute("old result"));
+		}
 		if(action != null && action.equals("update"))
 		{
 			try{
@@ -190,7 +195,12 @@ public class ProductController extends HttpServlet {
 				String cat = request.getParameter("Category Name");
 				Object[] arr = {name, sku, cat, price};
 				jdbcManager.update(s, arr);
-				request.setAttribute("insert success", "insert success");
+				Product p = new Product();
+				p.setName(name);
+				p.setSku(sku);
+				p.setCategory_name(cat);
+				p.setPrice(price);
+				request.setAttribute("insert success", p);
 
 
 			}
@@ -284,6 +294,159 @@ public class ProductController extends HttpServlet {
 				Object[] arr = {request.getParameter("Category Name")};
 				Object[] carr = new Object[0];
 				String s = "SELECT * FROM Product WHERE category_name = ?";
+				String sc = "SELECT * FROM Category";
+				ResultSet crs = jdbcManager.query(sc, carr);
+				ResultSet rs = jdbcManager.query(s, arr);
+				ArrayList<Category> clist = new ArrayList<Category>();
+				ArrayList<Product> list = new ArrayList<Product>();
+				while(rs.next())
+				{
+					Product p = new Product();
+					p.setName(rs.getString("name"));
+					p.setSku(rs.getInt("SKU"));
+					p.setCategory_name(rs.getString("category_name"));
+					p.setPrice(rs.getDouble("price"));
+					list.add(p);
+				}
+				while(crs.next())
+				{
+					Category c = new Category();
+					c.setId(crs.getInt("id"));
+					c.setName(crs.getString("name"));
+					c.setDescription(crs.getString("description"));
+					clist.add(c);
+				}
+				crs.close();
+				rs.close();
+
+				
+				
+				request.setAttribute("cresult", clist);
+				request.setAttribute("result", list);
+			}
+			catch(SQLException e)
+			{
+				request.setAttribute("error" , "error");
+				e.printStackTrace();
+			}
+			finally
+			{
+				try{
+				Object[] arr2 = new Object[0];
+				String s2 = "SELECT * FROM Category";
+				ResultSet rs1 = jdbcManager.query(s2, arr2);
+				ArrayList<Category> list1 = new ArrayList<Category>();
+				while(rs1.next())
+				{
+					Category c = new Category();
+					c.setId(rs1.getInt("id"));
+					c.setName(rs1.getString("name"));
+					c.setDescription(rs1.getString("description"));
+					
+					
+					list1.add(c);
+				}
+				rs1.close();
+				request.setAttribute("result1", list1);
+
+				
+				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
+				rd.forward(request, response);
+				}
+				catch(Exception e)
+				{
+					
+				}
+			}
+		}
+		else if(action != null && action.equals("select all"))
+		{
+			try
+			{
+				Object[] arr = new Object[0];
+				Object[] carr = new Object[0];
+				String s = "SELECT * FROM Product";
+				String sc = "SELECT * FROM Category";
+				ResultSet crs = jdbcManager.query(sc, carr);
+				ResultSet rs = jdbcManager.query(s, arr);
+				ArrayList<Category> clist = new ArrayList<Category>();
+				ArrayList<Product> list = new ArrayList<Product>();
+				while(rs.next())
+				{
+					Product p = new Product();
+					p.setName(rs.getString("name"));
+					p.setSku(rs.getInt("SKU"));
+					p.setCategory_name(rs.getString("category_name"));
+					p.setPrice(rs.getDouble("price"));
+					list.add(p);
+				}
+				while(crs.next())
+				{
+					Category c = new Category();
+					c.setId(crs.getInt("id"));
+					c.setName(crs.getString("name"));
+					c.setDescription(crs.getString("description"));
+					clist.add(c);
+				}
+				crs.close();
+				rs.close();
+
+				
+				
+				request.setAttribute("cresult", clist);
+				request.setAttribute("result", list);
+			}
+			catch(SQLException e)
+			{
+				request.setAttribute("error" , "error");
+				e.printStackTrace();
+			}
+			finally
+			{
+				try{
+				Object[] arr2 = new Object[0];
+				String s2 = "SELECT * FROM Category";
+				ResultSet rs1 = jdbcManager.query(s2, arr2);
+				ArrayList<Category> list1 = new ArrayList<Category>();
+				while(rs1.next())
+				{
+					Category c = new Category();
+					c.setId(rs1.getInt("id"));
+					c.setName(rs1.getString("name"));
+					c.setDescription(rs1.getString("description"));
+					
+					
+					list1.add(c);
+				}
+				rs1.close();
+				request.setAttribute("result1", list1);
+
+				
+				RequestDispatcher rd = request.getRequestDispatcher("/product.jsp");
+				rd.forward(request, response);
+				}
+				catch(Exception e)
+				{
+					
+				}
+			}
+		}
+		else if(action != null && action.equals("search"))
+		{
+			try
+			{
+				String s7 = "SELECT COUNT(*) as size FROM Category WHERE name = ?";
+				Object[] arr7 = {request.getParameter("Category Name")};
+				ResultSet rs7 = jdbcManager.query(s7, arr7);
+				rs7.next();
+				if(rs7.getInt("size")==0)
+				{
+					request.setAttribute("error","yes");
+				}
+				
+				Object[] arr = {request.getParameter("Category Name"), "%"+request.getParameter("Name")+"%"};
+				Object[] carr = new Object[0];
+				String s = "SELECT * FROM Product WHERE category_name = ? AND name LIKE ?";
 				String sc = "SELECT * FROM Category";
 				ResultSet crs = jdbcManager.query(sc, carr);
 				ResultSet rs = jdbcManager.query(s, arr);
